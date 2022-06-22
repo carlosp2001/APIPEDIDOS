@@ -1,12 +1,12 @@
 const sequelize = require('sequelize');
 const db = new sequelize(
-    'apipedidos', //base de datos
-    'carlosp2001', //usuario
-    'abc123def', //contraseña
+    process.env.DB_DATABASE,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD,
     {
-        host: 'localhost',
-        dialect: 'mysql',
-        port: 3306
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_CONNECTION,
+        port: process.env.DB_PORT,
     }
 );
 
