@@ -26,25 +26,25 @@ const pedidos_llevar = db.define(
         }
         
 );
-pedidos.hasMany(pedidos_llevar, {
-    foreignKey: 'idpedido',
-    otherKey: 'idpedido'
-});
+// pedidos.hasMany(pedidos_llevar, {
+//     foreignKey: 'idpedido',
+//     otherKey: 'idpedido'
+// });
 
-pedidos_llevar.belongsTo(pedidos, {
-    foreignKey: 'idpedido',
-    otherKey: 'idpedido'
-});
+// pedidos_llevar.belongsTo(pedidos, {
+//     foreignKey: 'idpedido',
+//     otherKey: 'idpedido'
+// });
 
-clientes.hasMany(pedidos_llevar, {
-    foreignKey: 'idcliente',
-    otherKey: 'idcliente'
-});
+// clientes.hasMany(pedidos_llevar, {
+//     foreignKey: 'idcliente',
+//     otherKey: 'idcliente'
+// });
 
-pedidos_llevar.belongsTo(clientes, {
-    foreignKey: 'idcliente',
-    otherKey: 'idcliente'
-});
+// pedidos_llevar.belongsTo(clientes, {
+//     foreignKey: 'idcliente',
+//     otherKey: 'idcliente'
+// });
 
 pedidos_llevar.sync().then(
     () => console.log("Sincronizacion Completa")
