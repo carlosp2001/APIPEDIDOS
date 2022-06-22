@@ -1,0 +1,14 @@
+{
+  "name": "apipedidos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "grupo #2",
+  "license": "ISC",
+  "devDependencies": {
+    "sequelize": "^6.21.0"
+  }
+}
