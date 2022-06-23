@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const db = require('../configuraciones/db');
-const pedidos = require('./modeloPedidos');
-const clientes = require('./modeloClientes');
-    
+// const pedidos = require('./modeloPedidos');
+// const clientes = require('./modeloClientes');
+
 const pedidos_llevar = db.define(
     'pedidos_llevar',{
         idregistro:{
@@ -48,6 +48,6 @@ const pedidos_llevar = db.define(
 
 pedidos_llevar.sync().then(
     () => console.log("Sincronizacion Completa")
-  );
+);
 
 module.exports = pedidos_llevar;
