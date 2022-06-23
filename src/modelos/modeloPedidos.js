@@ -15,7 +15,7 @@ const Pedido = db.define(
         },
         fechahora: {
             type: DataTypes.DATE,
-            allowNull: false
+            defaultValue: DataTypes.NOW,
         },
         Estacion: {
             type: DataTypes.INTEGER,

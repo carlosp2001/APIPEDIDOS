@@ -29,11 +29,9 @@ exports.Guardar = async (req, res) => {
     }
     else{
         const { idmesero, estacion, Estacion, activo, modalidad, estado } = req.body;
-        const fechahora = Date.now();
         try {
             await modeloPedidos.create({
                 idmesero: idmesero,
-                fechahora: fechahora,
                 estacion: estacion,
                 Estacion: Estacion,
                 activo: activo,
@@ -67,7 +65,6 @@ exports.Editar = async (req, res) => {
     else{
         const { id } = req.query;
         const { idmesero, estacion, Estacion, activo, modalidad, estado } = req.body;
-        const fechahora = Date.now();
         try {
             var buscarPedido = await modeloPedidos.findOne({
                 where: {
@@ -79,7 +76,6 @@ exports.Editar = async (req, res) => {
             }
             else{
                 buscarPedido.idmesero = idmesero;
-                buscarPedido.fechahora = fechahora;
                 buscarPedido.estacion = estacion;
                 buscarPedido.Estacion = Estacion;
                 buscarPedido.activo = activo;
