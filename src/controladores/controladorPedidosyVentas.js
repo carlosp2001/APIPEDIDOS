@@ -58,7 +58,7 @@ exports.Editar = async (req, res) =>{
         // });
     }
     else {
-        const NumeroFactura = req.query.id;
+        // const NumeroFactura = req.query.id;
         const { NumeroFactura, NumeroPedido } = req.body;
         try {
             var buscarPedidosLlevar = await modeloPedidosyVentas.findOne({

@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const {body, query} = require('express-validator');
 
-const controladorPedidosyVentas = require('../controladores/controladorPedidosyVentas.js');
+const controladorPedidosyVentas = require('../controladores/controladorPedidosyVentas');
 const rutas = Router();
 rutas.get('/listar', controladorPedidosyVentas.Listar);
 
