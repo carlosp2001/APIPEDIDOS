@@ -2,7 +2,6 @@ const { DataTypes } = require("sequelize");
 const db = require('../configuraciones/db');
 // const pedidos = require('./modeloPedidos');
 // const clientes = require('./modeloClientes');
-
 const pedidos_llevar = db.define(
     'pedidos_llevar',{
         idregistro:{
