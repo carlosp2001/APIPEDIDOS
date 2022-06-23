@@ -28,3 +28,16 @@ const pedidos_mesa = db.define(
         timestamps: false
     }
 );
+pedidos.hasMany(pedidos_mesa,{
+    foreignKey: 'idpedido',
+    otherKey: 'idpedido'
+});
+pedidos_mesa.belongsTa(pedidos ,{
+    foreignKey: 'idpedido',
+    otherKey: 'idpedido'
+});
+clientes.hasMany(pedidos_mesa,{
+    foreignKey: 'idpedido',
+    otherKey: 'idpedido'
+});
+
