@@ -1,5 +1,7 @@
 const {DataTypes}=require('sequelize')
 const db = require('../configuraciones/db')
+//modelo es donde se genera o crea la tabla de la bdd para que la api conozca los campos que lleva
+//con el const pedidos_elaborados le indicamos los campos de la tabla
 
 
 const pedidos_elaborados = db.define(
@@ -8,7 +10,6 @@ const pedidos_elaborados = db.define(
         iddetallepedido: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoIncrement: true,
             allowNull: false
         },
         idusuario: {
@@ -17,15 +18,16 @@ const pedidos_elaborados = db.define(
         },
         fechahora: {
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW
+            defaultValue: DataTypes.NOW //default=cuando se ingresa un nuevo registro, el valor sera la fecha actual de cuando se ingrese
         }
     },
     {
-        tableName:'pedidos_elaborados',
-        timestamps: false
+        tableName:'pedidos_elaborados', //aqui le indicamos el nombre a la tabla
+        timestamps: false //para no agg campos de la fecha actual
     }
 );
 
+//con el sync creamos la trabla desde el visual
 pedidos_elaborados.sync().then(
     () => console.log("Sincronizacion Completa")
 );
