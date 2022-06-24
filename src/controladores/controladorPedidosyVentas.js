@@ -21,7 +21,7 @@ exports.Guardar = async (req, res) => {
     };  
     if (validaciones.errors.length > 0) {
         validaciones.errors.array.forEach(element => {
-             msj.mensaje += element.msg + '. ';
+            msj.mensaje += element.msg + '. ';
         });
     }
     else {
@@ -44,6 +44,34 @@ exports.Guardar = async (req, res) => {
     res.json(msj);
     
    
+};
+
+exports.GuardarBulk = async (req, res) => {
+    // console.log(req.body);
+    const validaciones = validationResult(req);
+    console.log(validaciones.errors);
+    const msj = {
+        mensaje: []
+    };  
+    if (validaciones.errors.length > 0) {
+        msj.mensaje = validaciones.errors;
+    }
+    else {
+        const pedidosyVentas = req.body;
+        try {
+            await modeloPedidosyVentas.bulkCreate(
+                pedidosyVentas
+            )
+            msj.mensaje = 'Registro almacenado'
+        } catch (error) {
+            msj.mensaje = 'Error al guardar los datos';
+            
+        }
+    
+    }
+
+    res.json(msj);
+    
 };
 
 exports.Editar = async (req, res) =>{

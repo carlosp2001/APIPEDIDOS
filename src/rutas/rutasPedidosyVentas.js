@@ -26,4 +26,14 @@ query('NumeroFactura')
 .isInt().withMessage("El numero de factura debe ser un entero"),
 controladorPedidosyVentas.Eliminar);
 
+rutas.post('/guardarbulk',
+body().isArray().withMessage("Debe enviar un arreglo"),
+body('*.NumeroFactura')
+.notEmpty().withMessage("No se aceptan valores vacios para el NumeroFactura")
+.isInt().withMessage("El NumeroFactura debe ser un numero entero"),
+body('*.NumeroPedido')
+.notEmpty().withMessage("No se aceptan valores vacios para el NumeroPedido")
+.isInt().withMessage("El NumeroPedido debe ser un numero entero"),
+controladorPedidosyVentas.GuardarBulk)
+
 module.exports = rutas;
