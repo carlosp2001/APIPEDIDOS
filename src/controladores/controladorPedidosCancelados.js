@@ -50,7 +50,7 @@ exports.Editar = async (req, res) => {
         });
     }else{
         const {id} = req.query;
-        const {usuario} = req.body;
+        const {usuario, fechahora} = req.body;
         try { 
             var buscarPedido = await modeloPedidosCancelados.findOne({
                 where: {
@@ -62,6 +62,7 @@ exports.Editar = async (req, res) => {
             }
             else{
                 buscarPedido.usuario = usuario;
+                buscarPedido.fechahora = fechahora;
                 await buscarPedido.save();
 
                 msj.mensaje = 'El pedido cancelado se actualizo correctamente';
