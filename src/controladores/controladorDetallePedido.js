@@ -125,3 +125,155 @@ exports.Eliminar = async (req, res) => {
         }
     }
 }
+
+exports.EstadoCancelado = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else{
+        const {idregistro} = req.query;
+        const {Cancelado} = req.body;
+        
+        try {
+            var buscarDetallePedido = await modeloDetallePedidos.findOne({
+                where: {
+                    idregistro
+                }
+            })
+            if(buscarDetallePedido){
+                buscarDetallePedido.Cancelado = Cancelado;
+                await buscarDetallePedido.save();
+
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
+            }else{
+                msj.estado = 'ERROR';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,200,msj);
+            }
+            
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }
+}
+
+exports.EstadoElaborado = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else{
+        const {idregistro} = req.query;
+        const {Elaborado} = req.body;
+        
+        try {
+            var buscarDetallePedido = await modeloDetallePedidos.findOne({
+                where: {
+                    idregistro
+                }
+            })
+            if(buscarDetallePedido){
+                buscarDetallePedido.Elaborado = Elaborado;
+                await buscarDetallePedido.save();
+
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
+            }else{
+                msj.estado = 'ERROR';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,200,msj);
+            }
+            
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }
+}
+
+exports.EstadoEntregado = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else{
+        const {idregistro} = req.query;
+        const {Entregado} = req.body;
+        
+        try {
+            var buscarDetallePedido = await modeloDetallePedidos.findOne({
+                where: {
+                    idregistro
+                }
+            })
+            if(buscarDetallePedido){
+                buscarDetallePedido.Entregado = Entregado;
+                await buscarDetallePedido.save();
+
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
+            }else{
+                msj.estado = 'ERROR';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,200,msj);
+            }
+            
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }
+}
+
+exports.EstadoFacturado = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else{
+        const {idregistro} = req.query;
+        const {Facturado} = req.body;
+        
+        try {
+            var buscarDetallePedido = await modeloDetallePedidos.findOne({
+                where: {
+                    idregistro
+                }
+            })
+            if(buscarDetallePedido){
+                buscarDetallePedido.Facturado = Facturado;
+                await buscarDetallePedido.save();
+
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
+            }else{
+                msj.estado = 'ERROR';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,200,msj);
+            }
+            
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }
+}
