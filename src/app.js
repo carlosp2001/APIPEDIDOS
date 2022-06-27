@@ -9,6 +9,7 @@ app.use(express.json());
 app.use('/api/pedidosLlevar', require('./rutas/rutasPedidosLlevar'));
 app.use('/api/detallepedidos',require('./rutas/rutasDetallePedido'));
 app.use('/api/pedidosyVentas', require('./rutas/rutasPedidosyVentas'));
+app.use('/api/pedidoselaborados',require('./rutas/rutaspedidoselaborados'));
 
 app.listen(app.get('port'), () => {
     console.log("Servidor inciado en el puerto " + app.get('port'));
