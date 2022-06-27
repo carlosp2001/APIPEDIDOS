@@ -19,7 +19,7 @@ const pedidos_mesa = db.define(
             allowNull: false
         },
         nombrecuenta:{
-            type: DataTypes.BOOLEAN,
+            type: DataTypes.STRING,
             allowNull: false
         }
     },
@@ -27,7 +27,8 @@ const pedidos_mesa = db.define(
         tableName: 'pedidos_mesa',
         timestamps: false
     }
-);
+); 
+/*
 pedidos.hasMany(pedidos_mesa,{
     foreignKey: 'idpedido',
     otherKey: 'idpedido'
@@ -40,4 +41,5 @@ clientes.hasMany(pedidos_mesa,{
     foreignKey: 'idpedido',
     otherKey: 'idpedido'
 });
-
+*/
+module.exports = pedidos_mesa;
