@@ -6,6 +6,7 @@ app.set('port', 3001);
 app.use(morgan('dev'));
 app.use(express.json());
 
+app.use('/api/pedidos',require('./rutas/rutasPedidos'));
 app.use('/api/pedidosLlevar', require('./rutas/rutasPedidosLlevar'));
 app.use('/api/detallepedidos',require('./rutas/rutasDetallePedido'));
 app.use('/api/pedidosyVentas', require('./rutas/rutasPedidosyVentas'));
