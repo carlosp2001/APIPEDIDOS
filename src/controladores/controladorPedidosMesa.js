@@ -1,7 +1,35 @@
+/*-----------By: Idaly Manzanares 0209200201095-----------*/ 
+
 const {validationResult} = require('express-validator');
 const modeloPedidosMesa = require('../modelos/modelosPedidosMesa');
-exports.inicio = (req, res) =>{
-    res.send("Iniciando Modulo PedidosMesa");
+
+exports.inicio = async (req, res) =>{
+    var msj = validacion(req);
+    const modeloPedidosMesa = [
+        {
+        modulo : "Pedidos Mesa",
+        ruta: "/api/pedidosmesa",
+        metodo: "get",
+        parametros: "",
+        descripcion: "Inicio del modulo de Pedidos Mesa"
+        },
+        {
+        modulo: "Pedidos Mesa",
+        ruta: "/api/pedidosmesa/listar",
+        metodo: "get",
+        parametros: "",
+        descripcion: "Lista todos los pedidos"
+        },
+];
+const datos = {
+    api: "Proyecto Grupo2",
+    descripcion: "Interfaz de programacion para el sistema de pedidos",
+    propiedad: "Grupo2",
+    desarrollador: "Idaly Manzanares",
+    Colaboradores: "",
+    fecha: "29/06/2022",
+};
+msj.datos = datos;
 };
 
 exports.Listar = async (req, res) => {

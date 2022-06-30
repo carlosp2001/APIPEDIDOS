@@ -1,3 +1,5 @@
+/*-----------By: Idaly Manzanares 0209200201095-----------*/ 
+
 const { DataTypes } = require("sequelize");
 const db = require('../configuraciones/db');
 
