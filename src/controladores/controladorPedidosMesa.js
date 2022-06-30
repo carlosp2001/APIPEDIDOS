@@ -1,5 +1,8 @@
 const {validationResult} = require('express-validator');
 const modeloPedidosMesa = require('../modelos/modelosPedidosMesa');
+exports.inicio = (req, res) =>{
+    res.send("Iniciando Modulo PedidosMesa");
+};
 
 exports.Listar = async (req, res) => {
     try {
