@@ -1,6 +1,53 @@
 const {validationResult} = require('express-validator');
 const modeloPedidosLlevar = require('../modelos/modeloPedidosLlevar');
 
+exports.Inicio = async (req, res) => {
+    const listaModulos = [
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos",
+            metodo: "get",
+            parametros: "",
+            descripcion: "Inicio el Modulo"
+        },
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos/listar",
+            metodo: "get",
+            parametros: "",
+            descripcion: "Solicitud para listar registros en pedidosLlevar"
+        },
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos/guardar",
+            metodo: "post",
+            parametros: "idpedido, idcliente",
+            descripcion: "Solicitud para guardar registros en pedidosLlevar"
+        },
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos/editar",
+            metodo: "put",
+            parametros: "id, idpedido, idcliente",
+            descripcion: "Solicitud para editar registros en pedidosLlevar"
+        },
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos/eliminar",
+            metodo: "del",
+            parametros: "idregistro",
+            descripcion: "Solicitud para eliminar registro en pedidosLlevar"
+        },
+    ]
+    const datos = {
+        api: "API PEDIDOS",
+        descripcion: "Interfaz de programacion",
+        propiedad: "DESOFIW",
+    }
+    res.json(listaModulos);
+}
+
+
 exports.Listar = async (req, res) => {
     try {
         const lista = await modeloPedidosLlevar.findAll();
@@ -84,7 +131,7 @@ exports.Editar = async (req, res) =>{
 
 
 exports.Eliminar = async (req, res) =>{
-    const idregistro = req.query.id;
+    const id = req.query.id;
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
     const msj  = {
@@ -96,7 +143,7 @@ exports.Eliminar = async (req, res) =>{
     else {
         var eliminarpedidosllevar = await modeloPedidosLlevar.destroy({
             where: {
-                idregistro: idregistro
+                idregistro: id
             }
         });
         if (eliminarpedidosllevar) {
