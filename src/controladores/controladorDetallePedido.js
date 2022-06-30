@@ -46,6 +46,29 @@ exports.Guardar = async (req, res) => {
     }
 }
 
+exports.GuardarBulk = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        const DetallePedido = req.body;
+        try {
+            await modeloDetallePedidos.bulkCreate(
+                DetallePedido
+            )
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }    
+};
+
 exports.Editar = async (req, res) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
