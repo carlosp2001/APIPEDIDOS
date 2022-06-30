@@ -5,7 +5,7 @@ const controladorDetallePedido = require('../controladores/controladorDetallePed
 const rutas = Router();
 
 
-
+rutas.get('/', controladorDetallePedido.Inicio)
 rutas.get('/listar', controladorDetallePedido.Listar);
 
 rutas.post('/guardar', 
