@@ -126,13 +126,13 @@ exports.Eliminar = async (req, res) => {
     }
 }
 
-exports.EstadoCancelado = async (req, res) => {
+exports.EstadoCancelado = async (estado, id) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
     }else{
-        const {idregistro} = req.query;
-        const {Cancelado} = req.body;
+        const {idregistro} = id;
+        const {Cancelado} = estado;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -147,30 +147,30 @@ exports.EstadoCancelado = async (req, res) => {
                 msj.estado = 'correcto';
                 msj.mensaje = 'Se ha guardado el registro correctamente';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }
             
         } catch (error) {
             msj.estado = 'error';
             msj.mensaje = 'La Peticion no se ejecuto';
             msj.errores = error;
-            MSJ(res,500,error)
+            return(msj)
         }
     }
 }
 
-exports.EstadoElaborado = async (req, res) => {
+exports.EstadoElaborado = async (estado, id) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
     }else{
-        const {idregistro} = req.query;
-        const {Elaborado} = req.body;
+        const {idregistro} = id;
+        const {Elaborado} = estado;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -184,31 +184,28 @@ exports.EstadoElaborado = async (req, res) => {
 
                 msj.estado = 'correcto';
                 msj.mensaje = 'Se ha guardado el registro correctamente';
-                msj.errores = '';
-                MSJ(res,200,msj);
+                msj.errores = '';                
+                return(msj)
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
-                msj.errores = '';
-                MSJ(res,200,msj);
+                msj.errores = '';                
+                return(msj)
             }
             
         } catch (error) {
-            msj.estado = 'error';
-            msj.mensaje = 'La Peticion no se ejecuto';
-            msj.errores = error;
-            MSJ(res,500,error)
+            return(msj)
         }
     }
 }
 
-exports.EstadoEntregado = async (req, res) => {
+exports.EstadoEntregado = async (estado, id) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
-        MSJ(res,200,msj);
+        return(msj);
     }else{
-        const {idregistro} = req.query;
-        const {Entregado} = req.body;
+        const {idregistro} = id;
+        const {Entregado} = estado;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -223,30 +220,30 @@ exports.EstadoEntregado = async (req, res) => {
                 msj.estado = 'correcto';
                 msj.mensaje = 'Se ha guardado el registro correctamente';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }
             
         } catch (error) {
             msj.estado = 'error';
             msj.mensaje = 'La Peticion no se ejecuto';
             msj.errores = error;
-            MSJ(res,500,error)
+            return(msj)
         }
     }
 }
 
-exports.EstadoFacturado = async (req, res) => {
+exports.EstadoFacturado = async (estado, id) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
     }else{
-        const {idregistro} = req.query;
-        const {Facturado} = req.body;
+        const {idregistro} = id;
+        const {Facturado} = estado;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -261,19 +258,19 @@ exports.EstadoFacturado = async (req, res) => {
                 msj.estado = 'correcto';
                 msj.mensaje = 'Se ha guardado el registro correctamente';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }
             
         } catch (error) {
             msj.estado = 'error';
             msj.mensaje = 'La Peticion no se ejecuto';
             msj.errores = error;
-            MSJ(res,500,error)
+            return(msj)
         }
     }
 }

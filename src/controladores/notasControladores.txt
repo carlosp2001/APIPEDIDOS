@@ -1,0 +1,6 @@
+cons detallepedidos = require "detallepedidos"
+
+const EstadoFactura = detallepedidos.EstadoFacturad();
+if(estadoFactura){
+    console.log("Factura pagada");
+}
