@@ -1,5 +1,59 @@
+//modulo trabajado por francis lara.
 const {validationResult} = require('express-validator');
 const modeloPedidosCancelados = require('../modelos/modeloPedidosCancelados');
+
+exports.Inicio = async (req, res) => {
+    const listaModulos = [
+        {
+            modulo:"PedidosCancelados",
+            ruta:"/api/pedidos/pedidosCancelados",
+            metodo:"GET",
+            parametros:"",
+            descripcion:"Inicio del módulo PedidosCancelados"
+        },
+        {
+            modulo:"PedidosCancelados",
+            ruta:"/api/pedidos/pedidosCancelados/listar",
+            metodo:"GET",
+            parametros:"",
+            descripcion:"Lista todos los Pedidos cancelados"
+        },
+        {
+            modulo:"PedidosCancelados",
+            ruta:"/api/pedidos/pedidosCancelados/guardar",
+            metodo:"POST",
+            parametros:"numeropedido,usuario",
+            descripcion:"Guarda un detalle de un Pedido Cancelado"
+        },
+        {
+            modulo:"PedidosCancelados",
+            ruta:"/api/pedidos/pedidosCancelados/editar",
+            metodo:"PUT",
+            query:"id",
+            parametros:"usuario",
+            descripcion:"Actualiza un pedido cancelado"
+        },
+        {
+            modulo:"PedidosCancelados",
+            ruta:"/api/pedidos/pedidosCancelados/eliminar",
+            metodo:"DELETE",
+            query:"id",
+            descripcion:"Elimina un pedido Cancelado"
+        }
+    ]
+    const datos = {
+        api:"API-SIGRES",
+        segmento:"Pedidos Cancelados",
+        descripcion:"CRUD para PedidosCancelados",
+        propiedad:"Sistemas SIGRES",
+        desarrollador:"Francis Joe Lara Chavez",
+        colaboradores:"",
+        fecha:"30/06/2022",
+        listaModulos
+    }
+    res.json(datos);
+}
+
 
 exports.Listar = async(req,res)=>{
         try {
