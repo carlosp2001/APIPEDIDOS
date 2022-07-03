@@ -1,3 +1,4 @@
+//modelo trabajado por francis lara
 const { DataTypes} = require ("sequelize");
 const db = require ('../configuraciones/db');
 
