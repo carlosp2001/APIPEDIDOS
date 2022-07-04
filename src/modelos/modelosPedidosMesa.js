@@ -1,6 +1,7 @@
+/*-----------By: Idaly Manzanares 0209200201095-----------*/ 
+
 const { DataTypes } = require("sequelize");
 const db = require('../configuraciones/db');
-const pedidos = require('./modeloPedidos');
 
 const pedidos_mesa = db.define(
     'pedidos_mesa',{
@@ -14,6 +15,11 @@ const pedidos_mesa = db.define(
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        idpedidomesa:{
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        
         cuenta:{
             type: DataTypes.INTEGER,
             allowNull: false
@@ -42,4 +48,9 @@ clientes.hasMany(pedidos_mesa,{
     otherKey: 'idpedido'
 });
 */
+
+pedidos_mesa.sync().then(
+    () => console.log("Sincronizacion Completa")
+);
+
 module.exports = pedidos_mesa;

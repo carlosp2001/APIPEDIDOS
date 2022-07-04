@@ -1,9 +1,13 @@
+/*-----------By: Idaly Manzanares 0209200201095-----------*/ 
+
 const {Router} = require('express');
 const {body, query} = require('express-validator');
 
 const controladorPedidosMesa = require('../controladores/controladorPedidosMesa');
 const rutas = Router();
 rutas.get('/listar', controladorPedidosMesa.Listar);
+
+rutas.get('/', controladorPedidosMesa.Inicio)
 
 rutas.post('/guardar',
 body('idpedido')
