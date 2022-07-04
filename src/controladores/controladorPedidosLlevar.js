@@ -1,4 +1,5 @@
 const {validationResult} = require('express-validator');
+const { DATE } = require('sequelize');
 const modeloPedidosLlevar = require('../modelos/modeloPedidosLlevar');
 
 exports.Inicio = async (req, res) => {
@@ -43,8 +44,13 @@ exports.Inicio = async (req, res) => {
         api: "API PEDIDOS",
         descripcion: "Interfaz de programacion",
         propiedad: "DESOFIW",
+        desarrollador: "Carlos Alberto Pineda",
+        colaboradores: "",
+        fecha: "",
+        listaModulos
     }
-    res.json(listaModulos);
+    
+    res.json(datos);
 }
 
 
