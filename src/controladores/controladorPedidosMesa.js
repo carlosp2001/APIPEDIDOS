@@ -1,5 +1,67 @@
+/*-----------By: Idaly Manzanares 0209200201095-----------*/ 
+
 const {validationResult} = require('express-validator');
 const modeloPedidosMesa = require('../modelos/modelosPedidosMesa');
+
+exports.Inicio = async (req, res) => {
+    const listaModulos = [
+        {
+            modulo:"PedidosMesa",
+            ruta:"/api/pedidos/pedidosmesa",
+            metodo:"GET",
+            parametros:"",
+            descripcion:"Inicio del módulo PedidosMesa"
+        },
+        {
+            modulo:"PedidosMesa",
+            ruta:"/api/pedidos/pedidosmesa/listar",
+            metodo:"GET",
+            parametros:"",
+            descripcion:"Lista todos los PedidosMesa"
+        },
+        {
+            modulo:"PedidosMesa",
+            ruta:"/api/pedidos/pedidosmesa/guardar",
+            metodo:"POST",
+            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
+            descripcion:"Guarda un detalle PedidoMesa"
+        },
+        {
+            modulo:"PedidosMesa",
+            ruta:"/api/pedidos/pedidosmesa/guardarbulk",
+            metodo:"POST",
+            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
+            estructura:'[{idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta},{idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta}]',
+            descripcion:"Guarda PedidoMesa en bulk/lotes/granel"
+        },
+        {
+            modulo:"PedidosMesa",
+            ruta:"/api/pedidos/pedidosmesa/editar",
+            metodo:"PUT",
+            query:"id",
+            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
+            descripcion:"Actualiza un PedidoMesa"
+        },
+        {
+            modulo:"PedidosMesa",
+            ruta:"/api/pedidos/pedidosmesa/editar",
+            metodo:"DELETE",
+            query:"id",
+            descripcion:"Elimina un PedidoMesa"
+        }
+    ]
+    const datos = {
+        api:"API-SIGRES",
+        segmento:"DetallePedidos",
+        descripcion:"CRUD para DetallePedidos",
+        propiedad:"Sistemas SIGRES",
+        desarrollador:"Idaly Fernanda Manzanares Castro",
+        colaboradores:"",
+        fecha:"30/06/2022",
+        listaModulos
+    }
+    res.json(datos);
+}
 
 exports.Listar = async (req, res) => {
     try {
