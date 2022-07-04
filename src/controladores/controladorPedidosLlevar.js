@@ -1,5 +1,59 @@
 const {validationResult} = require('express-validator');
+const { DATE } = require('sequelize');
 const modeloPedidosLlevar = require('../modelos/modeloPedidosLlevar');
+
+exports.Inicio = async (req, res) => {
+    const listaModulos = [
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos",
+            metodo: "get",
+            parametros: "",
+            descripcion: "Inicio el Modulo"
+        },
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos/listar",
+            metodo: "get",
+            parametros: "",
+            descripcion: "Solicitud para listar registros en pedidosLlevar"
+        },
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos/guardar",
+            metodo: "post",
+            parametros: "idpedido, idcliente",
+            descripcion: "Solicitud para guardar registros en pedidosLlevar"
+        },
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos/editar",
+            metodo: "put",
+            query: "id",
+            parametros: "idpedido, idcliente",
+            descripcion: "Solicitud para editar registros en pedidosLlevar"
+        },
+        {
+            modulo: "Pedidos Llevar",
+            ruta: "api/pedidos/eliminar",
+            metodo: "del",
+            query: "id",
+            descripcion: "Solicitud para eliminar registro en pedidosLlevar"
+        },
+    ]
+    const datos = {
+        api: "API PEDIDOS",
+        descripcion: "Interfaz de programacion",
+        propiedad: "DESOFIW",
+        desarrollador: "Carlos Alberto Pineda",
+        colaboradores: "",
+        fecha: "",
+        listaModulos
+    }
+    
+    res.json(datos);
+}
+
 
 exports.Listar = async (req, res) => {
     try {
@@ -84,19 +138,19 @@ exports.Editar = async (req, res) =>{
 
 
 exports.Eliminar = async (req, res) =>{
-    const idregistro = req.query.id;
+    const id = req.query.id;
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
     const msj  = {
         mensaje: "Ninguno"
     };
-    if (!idregistro){
+    if (!id){
         msj.mensaje = 'Debe enviar los datos completos';
     }
     else {
         var eliminarpedidosllevar = await modeloPedidosLlevar.destroy({
             where: {
-                idregistro: idregistro
+                idregistro: id
             }
         });
         if (eliminarpedidosllevar) {

@@ -5,6 +5,8 @@ const controladorPedidosLlevar = require('../controladores/controladorPedidosLle
 const rutas = Router();
 rutas.get('/listar', controladorPedidosLlevar.Listar);
 
+rutas.get('/', controladorPedidosLlevar.Inicio);
+
 rutas.post('/guardar',
 body('idpedido')
 .notEmpty().withMessage("No se aceptan valores vacios para el id de pedido")
@@ -21,7 +23,7 @@ body('idpedido')
 body('idcliente').notEmpty().withMessage("No se aceptan valores vacios para el id del cliente"), controladorPedidosLlevar.Editar);
 
 rutas.delete('/eliminar',
-query('idregistro')
+query('id')
 .notEmpty().withMessage("No se aceptan valores vacios para el id de registro")
 .isInt().withMessage("El id de registro debe ser un entero"),
 controladorPedidosLlevar.Eliminar);
