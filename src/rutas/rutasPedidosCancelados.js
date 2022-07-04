@@ -7,7 +7,6 @@ const rutas = Router();
 
 rutas.get('/listar', controladorPedidosCancelados.Listar);
 
-
 rutas.get('/', controladorPedidosCancelados.Inicio);
 
 rutas.post('/guardar',
