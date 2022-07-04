@@ -29,14 +29,15 @@ exports.Inicio = async (req, res) => {
             modulo: "Pedidos Llevar",
             ruta: "api/pedidos/editar",
             metodo: "put",
-            parametros: "id, idpedido, idcliente",
+            query: "id",
+            parametros: "idpedido, idcliente",
             descripcion: "Solicitud para editar registros en pedidosLlevar"
         },
         {
             modulo: "Pedidos Llevar",
             ruta: "api/pedidos/eliminar",
             metodo: "del",
-            parametros: "idregistro",
+            query: "id",
             descripcion: "Solicitud para eliminar registro en pedidosLlevar"
         },
     ]
@@ -143,7 +144,7 @@ exports.Eliminar = async (req, res) =>{
     const msj  = {
         mensaje: "Ninguno"
     };
-    if (!idregistro){
+    if (!id){
         msj.mensaje = 'Debe enviar los datos completos';
     }
     else {
