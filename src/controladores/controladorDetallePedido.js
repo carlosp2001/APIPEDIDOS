@@ -24,15 +24,15 @@ exports.Inicio = async (req, res) => {
             modulo:"DetallePedidos",
             ruta:"/api/pedidos/detallepedidos/guardar",
             metodo:"POST",
-            parametros:"NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
+            parametros:"NumeroPedido,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
             descripcion:"Guarda un detalle pedido"
         },
         {
             modulo:"DetallePedidos",
             ruta:"/api/pedidos/detallepedidos/guardarbulk",
             metodo:"POST",
-            parametros:"NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
-            estructura:'[{NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado},{NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado}]',
+            parametros:"NumeroPedido,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
+            estructura:'[{NumeroPedido,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado},{NumeroPedido,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado}]',
             descripcion:"Guarda DetallesPedido en bulk/lotes/granel"
         },
         {
@@ -40,7 +40,7 @@ exports.Inicio = async (req, res) => {
             ruta:"/api/pedidos/detallepedidos/editar",
             metodo:"PUT",
             query:"id",
-            parametros:"NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
+            parametros:"NumeroPedido,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
             descripcion:"Actualiza un DetallePedido"
         },
         {
@@ -81,10 +81,10 @@ exports.Guardar = async (req, res) => {
     if(msj.errores.length > 0){
         MSJ(res,500,msj);
     }else{
-        const {NumeroPedidos, CodigoProducto, Cantidad, Notas, subproducto, Cancelado,Elaborado,Entregado,Facturado} = req.body;
+        const {NumeroPedido, CodigoProducto, Cantidad, Notas, subproducto, Cancelado,Elaborado,Entregado,Facturado} = req.body;
         try {
             await modeloDetallePedidos.create({
-                NumeroPedidos,
+                NumeroPedido,
                 CodigoProducto,
                 Cantidad,
                 Notas,
@@ -137,7 +137,7 @@ exports.Editar = async (req, res) => {
         MSJ(res,200,msj);
     }else{
         const {idregistro} = req.query;
-        const {NumeroPedidos, CodigoProducto, Cantidad, Notas, subproducto, Cancelado,Elaborado,Entregado,Facturado} = req.body;
+        const {NumeroPedido, CodigoProducto, Cantidad, Notas, subproducto, Cancelado,Elaborado,Entregado,Facturado} = req.body;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -146,7 +146,7 @@ exports.Editar = async (req, res) => {
                 }
             })
             if(buscarDetallePedido){
-                buscarDetallePedido.NumeroPedidos = NumeroPedidos;
+                buscarDetallePedido.NumeroPedido = NumeroPedido;
                 buscarDetallePedido.CodigoProducto = CodigoProducto;
                 buscarDetallePedido.Cantidad = Cantidad;
                 buscarDetallePedido.Notas = Notas;
