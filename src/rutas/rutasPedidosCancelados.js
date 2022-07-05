@@ -17,6 +17,16 @@ body('usuario')
 .notEmpty().withMessage('Debe ingresar el nombre del pedido cancelado').isInt().withMessage("El Id del Usuario debe ser un numero"),
 controladorPedidosCancelados.Guardar)
 
+rutas.post('/guardarbulk',
+body().isArray().withMessage("Debe enviar un arreglo"),
+body('*.numeropedido')
+.notEmpty().withMessage("No se aceptan valores vacios para el NumeroPedidos")
+.isInt().withMessage("El NumeroPedidos debe ser un numero entero"),
+body('*.usuario')
+.notEmpty().withMessage("No se aceptan valores vacios para el CodigoProducto")
+.isInt().withMessage("El CodigoProducto debe ser un numero entero"),
+controladorPedidosCancelados.GuardarBulk)
+
 rutas.put('/editar',
 query('id')
 .notEmpty().withMessage('El numero del pedido no puede estar vacio')

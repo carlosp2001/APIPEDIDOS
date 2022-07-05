@@ -29,6 +29,14 @@ exports.Inicio = async (req, res) => {
         },
         {
             modulo:"PedidosCancelados",
+            ruta:"/api/pedidos/pedidosCancelados/guardarbulk",
+            metodo:"POST",
+            parametros:"numeropedido,usuario",
+            estructura:'[{numeropedido,usuario},{numeropedido,usuario}]',
+            descripcion:"Guarda Pedidos Cancelados en bulk/lotes/granel"
+        },
+        {
+            modulo:"PedidosCancelados",
             ruta:"/api/pedidos/pedidosCancelados/editar",
             metodo:"PUT",
             query:"id",
@@ -92,6 +100,29 @@ exports.Guardar = async (req, res)=>{
         }
     }
 }
+
+exports.GuardarBulk = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        const PedidosCancelados = req.body;
+        try {
+            await modeloPedidosCancelados.bulkCreate(
+                PedidosCancelados
+            )
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }    
+};
 
 exports.Editar = async (req, res) => {
     const msj = validar(req);
