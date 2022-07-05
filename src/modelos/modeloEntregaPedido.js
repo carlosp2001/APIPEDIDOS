@@ -1,6 +1,7 @@
 const {DataTypes}=require('sequelize')
 const db = require('../configuraciones/db')
-const detalle_pedido = require('./modeloDetallePedidos')
+
+const pedidosdetalle = require('./modeloDetallePedidos')
 
 const entrega_pedido = db.define(
     'entrega_pedido',
@@ -30,18 +31,18 @@ const entrega_pedido = db.define(
 );
 
 
-detalle_pedido.hasMany(entrega_pedido, {
-    foreignKey: 'iddetallepedido',
+pedidosdetalle.hasMany(entrega_pedido, {
+    foreignKey: 'iddetalle_pedido',
     otherKey: 'idregistro'
 });
-entrega_pedido.belongsTo(detalle_pedido, {
-    foreignKey: 'iddetallepedido',
-    otherKey: 'iddetallepedido'
+ entrega_pedido.belongsTo(pedidosdetalle, {
+    foreignKey: 'iddetalle_pedido',
+    otherKey: 'iddetalle_pedido'
 });
 
 //con el sync creamos la trabla desde el visual
-entrega_pedido.sync().then(
-    () => console.log("Sincronizacion Completa")
-);
+// entrega_pedido.sync().then(
+//     () => console.log("Sincronizacion Completa")
+// );
 
 module.exports = entrega_pedido;

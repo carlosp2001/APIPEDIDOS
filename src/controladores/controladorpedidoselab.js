@@ -5,7 +5,8 @@ const validar = require('../componentes/validar')
 
 //en el controlador se crean las funciones (CRUD)
 
-exports.Listar = async(req, res) => {
+exports.Listar = async (req, res) => {
+    const msj = validar(req);
     try {
         const lista = await modeloPedidosElaborados.findAll();//con el findall le indicamos que busque todos los datos
         console.log(lista);

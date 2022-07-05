@@ -1,13 +1,14 @@
 const sequelize = require('sequelize');
 const db = new sequelize(
-    process.env.DB_DATABASE,
-    process.env.DB_USERNAME,
-    process.env.DB_PASSWORD,
+    'sigresdesarrollo',
+    'inventario',
+    'Inventario1@',
     {
-        host: process.env.DB_HOST,
-        dialect: process.env.DB_CONNECTION,
-        port: process.env.DB_PORT,
+        host: 'desofiw.xyz',
+        dialect: 'mysql',
+        port: 4306,
     }
 );
+
 
 module.exports = db;  

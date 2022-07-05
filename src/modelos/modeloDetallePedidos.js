@@ -1,6 +1,8 @@
 const {DataTypes}=require('sequelize')
 const db = require('../configuraciones/db')
-const pedidos = require('../modelos/modeloPedidos')
+
+const pedidos = require('./modeloPedidos')
+
 
 const detalle_pedido = db.define(
     'detalle_pedido',
@@ -66,8 +68,8 @@ detalle_pedido.belongsTo(pedidos, {
     otherKey: 'NumeroPedido'
 });
 
-detalle_pedido.sync().then(
-    () => console.log("Sincronizacion Completa")
-);
+// detalle_pedido.sync().then(
+//     () => console.log("Sincronizacion Completa")
+// );
 
 module.exports = detalle_pedido;

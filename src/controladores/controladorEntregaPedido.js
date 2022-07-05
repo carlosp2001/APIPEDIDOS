@@ -60,7 +60,8 @@ exports.Inicio = async (req, res)=>{
     res.json(datos);
 }
 
-exports.Listar = async(req, res) => {
+exports.Listar = async (req, res) => {
+    const msj = validar(req);
     try {
         const lista = await modeloEntregaPedido.findAll();
         console.log(lista);

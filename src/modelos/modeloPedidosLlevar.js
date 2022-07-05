@@ -46,8 +46,8 @@ pedidos_llevar.belongsTo(clientes, {
     otherKey: 'idcliente'
 }); */
 
-pedidos_llevar.sync().then(
-    () => console.log("Sincronizacion Completa")
-);
+// pedidos_llevar.sync().then(
+//     () => console.log("Sincronizacion Completa")
+// );
 
 module.exports = pedidos_llevar;

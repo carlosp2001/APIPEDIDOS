@@ -58,6 +58,7 @@ exports.Inicio = async (req, res) => {
 
 
 exports.Listar = async (req, res) => {
+    const msj = validar(req);
     try {
         const lista = await modeloPedidosLlevar.findAll();
         console.log(lista);

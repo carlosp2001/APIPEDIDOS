@@ -55,6 +55,7 @@ exports.Inicio = async (req, res) => {
 
 //Funcion para obtener todos los pedidos de la tabla
 exports.Listar = async (req, res) => { //async es para que espere a que se ejecute la funcion y le devuelta un resultado
+    const msj = validar(req);
     try {
         const lista = await modeloPedidos.findAll();
         console.log(lista);
