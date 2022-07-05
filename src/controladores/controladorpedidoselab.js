@@ -42,6 +42,29 @@ exports.Guardar = async (req, res) => {
     }
 }
 
+exports.GuardarBulk = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        const PedidoElaborado = req.body;
+        try {
+            await modeloPedidosElaborados.bulkCreate(
+                PedidoElaborado
+            )
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }    
+};
+
 exports.Editar = async (req, res) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
@@ -121,33 +144,40 @@ exports.Eliminar = async (req, res) => {
 
 
 exports.Inicio = async (req, res)=>{
-    var msj = validacion(req);
-    const modeloPedidosElaborados = [
+    const listamodulos = [
         {modulo: "Pedidos Elaborados",
-            ruta: "/api/pedidoselaborados", 
+            ruta: "/api/pedidos/pedidoselaborados", 
             metodo: "GET",
             parametros: "",
             descripcion: "Inicio del modulo pedidos elaborados"},
         {modulo: "Pedidos Elaborados listar",
-            ruta: "/api/pedidoselaborados/listar",
+            ruta: "/api/pedidos/pedidoselaborados/listar",
             metodo: "GET",
             descripcion: "Lista los pedidos elaborados"
         },
         {modulo: "Pedidos Elaborados guardar",
-            ruta: "/api/pedidoselaborados/guardar",
+            ruta: "/api/pedidos/pedidoselaborados/guardar",
             metodo: "POST",
             parametros: "iddetallepedido, idusuario",
             descripcion: "Guarda los pedidos elaborados"
         },
+        {
+            modulo:"Pedidos Elaborados",
+            ruta:"/api/pedidos/pedidoselaborados/guardarbulk",
+            metodo:"POST",
+            parametros: "iddetallepedido, idusuario",
+            estructura:'[{iddetallepedido,idusuario},{iddetallepedido,idusuario}]',
+            descripcion:"Guarda DetallesPedido en bulk/lotes/granel"
+        },
         {modulo: "Pedidos Elaborados editar",
-            ruta: "/api/pedidoselaborados/editar",
+            ruta: "/api/pedidos/pedidoselaborados/editar",
             metodo: "PUT",
             query: "id",
             parametros: "iddetallepedido, idusuario, fechahora",
             descripcion: "Edita los pedidos elaborados"
         },
         {modulo: "Pedidos Elaborados eliminar",
-            ruta: "/api/pedidoselaborados/eliminar",
+            ruta: "/api/pedidos/pedidoselaborados/eliminar",
             metodo: "DEL",
             query: "id",
             descripcion: "Elimina los pedidos elaborados"
