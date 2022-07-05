@@ -94,8 +94,6 @@ exports.Guardar = async (req, res) => {
             MSJ(res,500,error)
         }
     }
-
-    res.json(msj);
 };
 
 exports.Editar = async (req, res) =>{
