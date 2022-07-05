@@ -133,7 +133,8 @@ exports.Editar = async (req, res) =>{
 }
 
 
-exports.Eliminar = async (req, res) =>{
+exports.Eliminar = async (req, res) => {
+    const {id} =req.query
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
