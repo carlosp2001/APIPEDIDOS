@@ -74,13 +74,12 @@ exports.Guardar = async (req, res) => {
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
     }else {
-        const { idpedido, id, idpedidomesa, cuenta, nombrecuenta } = req.body;
+        const { idpedido, idpedidomesa, cuenta, nombrecuenta } = req.body;
         try {
             await modeloPedidosMesa.create(
                 {
                     idpedido: idpedido,
-                    id: id,
-                    idpedidomesa: idpedidomesa,
+                    idmesa: idpedidomesa,
                     cuenta: cuenta,
                     nombrecuenta: nombrecuenta
                 }
@@ -104,7 +103,7 @@ exports.Editar = async (req, res) =>{
         MSJ(res,200,msj);
     }else {
         const id = req.query.id;
-        const { idpedido, cuenta, nombrecuenta } = req.body;
+        const { idpedido, cuenta, nombrecuenta, idpedidomesa, } = req.body;
         try {
             var buscarPedidosMesa = await modeloPedidosMesa.findOne({
                 where: {
@@ -119,6 +118,7 @@ exports.Editar = async (req, res) =>{
             } else {
                 buscarPedidosMesa.idpedido = idpedido;
                 buscarPedidosMesa.cuenta = cuenta;
+                buscarPedidosMesa.idmesa = idpedidomesa;
                 buscarPedidosMesa.nombrecuenta = nombrecuenta;
                 await buscarPedidosMesa.save();
                 msj.estado = 'correcto';
@@ -142,9 +142,10 @@ exports.Eliminar = async (req, res) =>{
         MSJ(res,200,msj);
     }else {
         try {
+            const { idregistro } = req.query;
             var eliminarpedidosMesa = await modeloPedidosMesa.findOne({
                 where: {
-                    idregistro: id
+                    idregistro: idregistro
                 }
             });
             if (eliminarpedidosMesa) {

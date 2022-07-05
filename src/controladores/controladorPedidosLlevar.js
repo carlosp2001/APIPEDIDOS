@@ -8,28 +8,28 @@ exports.Inicio = async (req, res) => {
     const listaModulos = [
         {
             modulo: "Pedidos Llevar",
-            ruta: "api/pedidos",
+            ruta: "api/pedidos/pedidosLlevar",
             metodo: "get",
             parametros: "",
             descripcion: "Inicio el Modulo"
         },
         {
             modulo: "Pedidos Llevar",
-            ruta: "api/pedidos/listar",
+            ruta: "api/pedidos/pedidosLlevar/listar",
             metodo: "get",
             parametros: "",
             descripcion: "Solicitud para listar registros en pedidosLlevar"
         },
         {
             modulo: "Pedidos Llevar",
-            ruta: "api/pedidos/guardar",
+            ruta: "api/pedidos/pedidosLlevar/guardar",
             metodo: "post",
             parametros: "idpedido, idcliente",
             descripcion: "Solicitud para guardar registros en pedidosLlevar"
         },
         {
             modulo: "Pedidos Llevar",
-            ruta: "api/pedidos/editar",
+            ruta: "api/pedidos/pedidosLlevar/editar",
             metodo: "put",
             query: "id",
             parametros: "idpedido, idcliente",
@@ -37,7 +37,7 @@ exports.Inicio = async (req, res) => {
         },
         {
             modulo: "Pedidos Llevar",
-            ruta: "api/pedidos/eliminar",
+            ruta: "api/pedidos/pedidosLlevar/eliminar",
             metodo: "del",
             query: "id",
             descripcion: "Solicitud para eliminar registro en pedidosLlevar"
@@ -133,7 +133,8 @@ exports.Editar = async (req, res) =>{
 }
 
 
-exports.Eliminar = async (req, res) =>{
+exports.Eliminar = async (req, res) => {
+    const {id} =req.query
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
