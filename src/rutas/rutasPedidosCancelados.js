@@ -10,7 +10,7 @@ rutas.get('/listar', controladorPedidosCancelados.Listar);
 rutas.get('/', controladorPedidosCancelados.Inicio);
 
 rutas.post('/guardar',
-query('numeropedido')
+body('numeropedido')
 .notEmpty().withMessage('el numero de pedido cancelado no puede estar vacio')
 .isInt().withMessage('el numero del pedido debe ser un numero entero'),
 body('usuario')
