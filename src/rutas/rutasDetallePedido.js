@@ -5,7 +5,7 @@ const controladorDetallePedido = require('../controladores/controladorDetallePed
 const rutas = Router();
 
 
-
+rutas.get('/', controladorDetallePedido.Inicio)
 rutas.get('/listar', controladorDetallePedido.Listar);
 
 rutas.post('/guardar', 
@@ -19,6 +19,21 @@ body('Cantidad')
 .notEmpty().withMessage('La Cantidad es requerida')
 .isInt().withMessage('La Cantidad debe ser un numero entero'),
 controladorDetallePedido.Guardar);
+
+rutas.post('/guardarbulk',
+body().isArray().withMessage("Debe enviar un arreglo"),
+body('*.NumeroPedidos')
+.notEmpty().withMessage("No se aceptan valores vacios para el NumeroPedidos")
+.isInt().withMessage("El NumeroPedidos debe ser un numero entero"),
+body('*.CodigoProducto')
+.notEmpty().withMessage("No se aceptan valores vacios para el CodigoProducto")
+.isInt().withMessage("El CodigoProducto debe ser un numero entero"),
+body('*.Cantidad')
+.notEmpty().withMessage("No se aceptan valores vacios para el Cantidad")
+.isInt().withMessage("El Cantidad debe ser un numero entero"),
+controladorDetallePedido.GuardarBulk)
+
+module.exports = rutas;
 
 rutas.put('/editar', 
 query('idregistro')
