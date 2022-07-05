@@ -162,10 +162,10 @@ exports.Editar = async (req, res) => {
                 msj.errores = '';
                 MSJ(res,200,msj);
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                MSJ(res,500,msj);
             }
             
         } catch (error) {
@@ -196,7 +196,7 @@ exports.Eliminar = async (req, res) => {
                 msj.errores = '';
                 MSJ(res,200,msj);
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
                 msj.errores = '';
                 MSJ(res,500,msj);
