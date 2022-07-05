@@ -1,6 +1,58 @@
 const { validationResult } = require('express-validator');
 const modeloPedidos = require('../modelos/modeloPedidos');
 
+exports.Inicio = async (req, res) => {
+    const listaModulos = [
+        {
+            modulo:"Pedidos",
+            ruta:"/api/pedidos",
+            metodo:"GET",
+            parametros:"",
+            descripcion:"Inicio del módulo Pedidos"
+        },
+        {
+            modulo:"Pedidos",
+            ruta:"/api/pedidos/pedidos/listar",
+            metodo:"GET",
+            parametros:"",
+            descripcion:"Lista todos los Pedidos"
+        },
+        {
+            modulo:"Pedidos",
+            ruta:"/api/pedidos/pedidos/guardar",
+            metodo:"POST",
+            parametros:"idmesero,Estacion,activo,modalidad('ME','DO','LL'),estado('AAA','NNN','SNN','SSN','SNS','SSS','NSS','NSN')",
+            descripcion:"Guarda un detalle pedido"
+        },
+        {
+            modulo:"Pedidos",
+            ruta:"/api/pedidos/pedidos/editar",
+            metodo:"PUT",
+            query:"id",
+            parametros:"idmesero,fechahora,Estacion,activo,modalidad('ME','DO','LL'),estado('AAA','NNN','SNN','SSN','SNS','SSS','NSS','NSN')",
+            descripcion:"Actualiza un DetallePedido"
+        },
+        {
+            modulo:"Pedidos",
+            ruta:"/api/pedidos/pedidos/eliminar",
+            metodo:"DELETE",
+            query:"id",
+            descripcion:"Elimina un DetallePedido"
+        }
+    ]
+    const datos = {
+        api:"API-SIGRES",
+        segmento:"Pedidos",
+        descripcion:"CRUD para Pedidos",
+        propiedad:"Sistemas SIGRES",
+        desarrollador:"Elvis Rolando Rodesno Alfaro",
+        colaboradores:"",
+        fecha:"3/07/2022",
+        listaModulos
+    }
+    res.json(datos);
+}
+
 //Funcion para obtener todos los pedidos de la tabla
 exports.Listar = async (req, res) => { //async es para que espere a que se ejecute la funcion y le devuelta un resultado
     try {
@@ -64,7 +116,7 @@ exports.Editar = async (req, res) => {
     }
     else{
         const { id } = req.query;
-        const { idmesero, estacion, Estacion, activo, modalidad, estado } = req.body;
+        const { idmesero, fechahora, estacion, Estacion, activo, modalidad, estado } = req.body;
         try {
             var buscarPedido = await modeloPedidos.findOne({
                 where: {
@@ -76,6 +128,7 @@ exports.Editar = async (req, res) => {
             }
             else{
                 buscarPedido.idmesero = idmesero;
+                buscarPedido.fechahora = fechahora;
                 buscarPedido.estacion = estacion;
                 buscarPedido.Estacion = Estacion;
                 buscarPedido.activo = activo;

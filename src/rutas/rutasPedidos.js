@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { body,query } = require('express-validator');
 const controladorPedidos = require('../controladores/controladorPedidos');
 const rutas = Router();
+rutas.get('/', controladorPedidos.Inicio);
 rutas.get('/listar', controladorPedidos.Listar);
 
 
