@@ -20,11 +20,11 @@ controladorPedidosCancelados.Guardar)
 rutas.post('/guardarbulk',
 body().isArray().withMessage("Debe enviar un arreglo"),
 body('*.numeropedido')
-.notEmpty().withMessage("No se aceptan valores vacios para el NumeroPedidos")
-.isInt().withMessage("El NumeroPedidos debe ser un numero entero"),
+.notEmpty().withMessage("No se aceptan valores vacios para el numeropedido")
+.isInt().withMessage("El numeropedido debe ser un numero entero"),
 body('*.usuario')
-.notEmpty().withMessage("No se aceptan valores vacios para el CodigoProducto")
-.isInt().withMessage("El CodigoProducto debe ser un numero entero"),
+.notEmpty().withMessage("No se aceptan valores vacios para el usuario")
+.isInt().withMessage("El usuario debe ser un numero entero"),
 controladorPedidosCancelados.GuardarBulk)
 
 rutas.put('/editar',
