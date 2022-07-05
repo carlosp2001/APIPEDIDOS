@@ -55,6 +55,15 @@ const detalle_pedido = db.define(
         tableName:'detalle_pedido'
     }
 )
+pedidos.hasMany(detalle_pedido, {
+    foreignKey: 'NumeroPedido',
+    otherKey: 'NumeroPedido'
+});
+
+detalle_pedido.belongsTo(pedidos, {
+    foreignKey: 'NumeroPedido',
+    otherKey: 'NumeroPedido'
+});
 
 detalle_pedido.sync().then(
     () => console.log("Sincronizacion Completa")
