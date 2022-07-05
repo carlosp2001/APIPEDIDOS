@@ -1,5 +1,6 @@
 const {DataTypes}=require('sequelize')
 const db = require('../configuraciones/db')
+const pedidos = require('./modeloPedidos')
 
 const detalle_pedido = db.define(
     'detalle_pedido',
