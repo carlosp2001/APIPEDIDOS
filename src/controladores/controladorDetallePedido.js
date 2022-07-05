@@ -69,8 +69,10 @@ exports.Listar = async (req, res) => {
         const lista = await modeloDetallePedidos.findAll();
         res.json(lista);
     } catch (error) {
-        console.error(error);
-        res.json(error);
+        msj.estado = 'error';
+        msj.mensaje = 'La Peticion no se ejecuto';
+        msj.errores = error;
+        MSJ(res,500,error)
     }
 }
 
