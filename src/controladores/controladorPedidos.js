@@ -12,21 +12,21 @@ exports.Inicio = async (req, res) => {
         },
         {
             modulo:"Pedidos",
-            ruta:"/api/pedidos/pedidos/listar",
+            ruta:"/api/pedidos/pedido/listar",
             metodo:"GET",
             parametros:"",
             descripcion:"Lista todos los Pedidos"
         },
         {
             modulo:"Pedidos",
-            ruta:"/api/pedidos/pedidos/guardar",
+            ruta:"/api/pedidos/pedido/guardar",
             metodo:"POST",
             parametros:"idmesero,Estacion,activo,modalidad('ME','DO','LL'),estado('AAA','NNN','SNN','SSN','SNS','SSS','NSS','NSN')",
             descripcion:"Guarda un detalle pedido"
         },
         {
             modulo:"Pedidos",
-            ruta:"/api/pedidos/pedidos/editar",
+            ruta:"/api/pedidos/pedido/editar",
             metodo:"PUT",
             query:"id",
             parametros:"idmesero,fechahora,Estacion,activo,modalidad('ME','DO','LL'),estado('AAA','NNN','SNN','SSN','SNS','SSS','NSS','NSN')",
@@ -34,7 +34,7 @@ exports.Inicio = async (req, res) => {
         },
         {
             modulo:"Pedidos",
-            ruta:"/api/pedidos/pedidos/eliminar",
+            ruta:"/api/pedidos/pedido/eliminar",
             metodo:"DELETE",
             query:"id",
             descripcion:"Elimina un DetallePedido"
