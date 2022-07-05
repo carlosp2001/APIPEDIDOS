@@ -5,8 +5,10 @@ const controladorpedidoselaborados = require('../controladores/controladorpedido
 const rutas = Router();
 
 
+
 //*Listar
 rutas.get('/listar', controladorpedidoselaborados.Listar);
+rutas.get('/', controladorpedidoselaborados.Inicio)
 
 
 //*Guardar
