@@ -3,20 +3,22 @@ const db = require("../configuraciones/db");
 const pedidos = require("./modeloPedidos");
 //const facturas = require("./modeloFacturas");
 
-const PedidosyVentas = db.define(
-  "PedidosyVentas",
+const pedidos_x_ventas = db.define(
+  "pedidos_x_ventas",
   {
     NumeroFactura: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true
     },
     NumeroPedido: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true
     },
   },
   {
-    tableName: "PedidosyVentas",
+    tableName: "pedidos_x_ventas",
     timestamps: false,
   }
 );
@@ -41,5 +43,5 @@ PedidosyVentas.belongsTo(facturas, {
   otherKey: 'NumeroFactura'
 });
  */
-PedidosyVentas.sync().then(() => console.log("Sincronizacion Completa"));
-module.exports = PedidosyVentas;
+pedidos_x_ventas.sync().then(() => console.log("Sincronizacion Completa"));
+module.exports = pedidos_x_ventas;

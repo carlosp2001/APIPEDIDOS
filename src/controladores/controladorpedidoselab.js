@@ -1,7 +1,7 @@
-const {validationResult} = require('express-validator');
-//se usa el modelo creado, lo llamamos dentro de una variable
 const modeloPedidosElaborados = require('../modelos/modeloPedidosElaborados');
 
+const MSJ = require('../componentes/mensajes')
+const validar = require('../componentes/validar')
 
 //en el controlador se crean las funciones (CRUD)
 
@@ -11,21 +11,17 @@ exports.Listar = async(req, res) => {
         console.log(lista);
         res.json(lista);
     } catch (error) {
-        console.error(error);
-        res.json(error);
+        msj.estado = 'error';
+        msj.mensaje = 'La Peticion no se ejecuto';
+        msj.errores = error;
+        MSJ(res,500,error)
     }
 }
 
 exports.Guardar = async (req, res) => {
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ''
-    };
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.forEach(error => {
-            msj.mensaje += error.msg + '. ';
-        });
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
     }else{
         const {iddetallepedido, idusuario} = req.body;
         try {            
@@ -33,24 +29,46 @@ exports.Guardar = async (req, res) => {
                 iddetallepedido: iddetallepedido, //izquierda=identico a la tabla //derecha=es la variable que le declaramos en la linea 30
                 idusuario: idusuario //izquierda=identico a la tabla //derecha=es la variable que le declaramos en la linea 30
             });
-            msj.mensaje = 'Cargo guardado correctamente';
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }
-    res.json(msj.mensaje);
 }
 
+exports.GuardarBulk = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        const PedidoElaborado = req.body;
+        try {
+            await modeloPedidosElaborados.bulkCreate(
+                PedidoElaborado
+            )
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }    
+};
+
 exports.Editar = async (req, res) => {
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ''
-    };
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.forEach(error => {
-            msj.mensaje += error.msg + '. ';
-        });
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
     }else{
         const {id} = req.query; //es la variable que declaramos en el thunder
         const {idusuario} = req.body;
@@ -61,32 +79,33 @@ exports.Editar = async (req, res) => {
                 }
             });       
             if(!buscardetalle){//el signo de admiracion significa si esta vacio o es false
-                msj.mensaje = 'No se ha encontrado un detalle pedido con el ID ' + id;
+                msj.estado = 'error';
+                msj.mensaje = 'No se ha encontrado un registro con el ID ' + id;
+                msj.errores = '';
+                MSJ(res,500,msj);
             }
             else{
                 buscardetalle.idusuario = idusuario;
                 await buscardetalle.save();
 
-                
+                msj.estado = 'correcto';
                 msj.mensaje = 'Detalle pedido actualizado correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
             }
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }
-    res.json(msj.mensaje);
 }
 
 exports.Eliminar = async (req, res) => {
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ''
-    };
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.forEach(error => {
-            msj.mensaje += error.msg + '. ';
-        });
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
     }else{
         const {id} = req.query;
         try { 
@@ -96,7 +115,10 @@ exports.Eliminar = async (req, res) => {
                 }
             });       
             if(!buscardetalle){
-                msj.mensaje = 'No se ha encontrado un detalle pedido con el ID ' + id;
+                msj.estado = 'error';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,500,msj);
             }
             else{
                 await buscardetalle.destroy({
@@ -104,46 +126,58 @@ exports.Eliminar = async (req, res) => {
                         iddetallepedido: id
                     }
                 });
-                msj.mensaje = 'Datalle pedido eliminado correctamente';
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha eliminado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
             }
         } catch (error) {
-            msj.mensaje = 'Error al borrar el detalle pedido';
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }
-    res.json(msj.mensaje);
 
 }
 
 
 
 exports.Inicio = async (req, res)=>{
-    var msj = validacion(req);
-    const modeloPedidosElaborados = [
+    const listamodulos = [
         {modulo: "Pedidos Elaborados",
-            ruta: "/api/pedidoselaborados", 
+            ruta: "/api/pedidos/pedidoselaborados", 
             metodo: "GET",
             parametros: "",
             descripcion: "Inicio del modulo pedidos elaborados"},
         {modulo: "Pedidos Elaborados listar",
-            ruta: "/api/pedidoselaborados/listar",
+            ruta: "/api/pedidos/pedidoselaborados/listar",
             metodo: "GET",
             descripcion: "Lista los pedidos elaborados"
         },
         {modulo: "Pedidos Elaborados guardar",
-            ruta: "/api/pedidoselaborados/guardar",
+            ruta: "/api/pedidos/pedidoselaborados/guardar",
             metodo: "POST",
             parametros: "iddetallepedido, idusuario",
             descripcion: "Guarda los pedidos elaborados"
         },
+        {
+            modulo:"Pedidos Elaborados",
+            ruta:"/api/pedidos/pedidoselaborados/guardarbulk",
+            metodo:"POST",
+            parametros: "iddetallepedido, idusuario",
+            estructura:'[{iddetallepedido,idusuario},{iddetallepedido,idusuario}]',
+            descripcion:"Guarda DetallesPedido en bulk/lotes/granel"
+        },
         {modulo: "Pedidos Elaborados editar",
-            ruta: "/api/pedidoselaborados/editar",
+            ruta: "/api/pedidos/pedidoselaborados/editar",
             metodo: "PUT",
             query: "id",
             parametros: "iddetallepedido, idusuario, fechahora",
             descripcion: "Edita los pedidos elaborados"
         },
         {modulo: "Pedidos Elaborados eliminar",
-            ruta: "/api/pedidoselaborados/eliminar",
+            ruta: "/api/pedidos/pedidoselaborados/eliminar",
             metodo: "DEL",
             query: "id",
             descripcion: "Elimina los pedidos elaborados"

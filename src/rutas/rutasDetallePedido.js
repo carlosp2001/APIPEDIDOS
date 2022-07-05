@@ -9,8 +9,8 @@ rutas.get('/', controladorDetallePedido.Inicio)
 rutas.get('/listar', controladorDetallePedido.Listar);
 
 rutas.post('/guardar', 
-body('NumeroPedidos')
-.notEmpty().withMessage('El NumeroPedidos es requerido'),
+body('NumeroPedido')
+.notEmpty().withMessage('El NumeroPedido es requerido'),
 
 body('CodigoProducto')
 .notEmpty().withMessage('El CodigoProducto es requerido'),
@@ -22,9 +22,9 @@ controladorDetallePedido.Guardar);
 
 rutas.post('/guardarbulk',
 body().isArray().withMessage("Debe enviar un arreglo"),
-body('*.NumeroPedidos')
-.notEmpty().withMessage("No se aceptan valores vacios para el NumeroPedidos")
-.isInt().withMessage("El NumeroPedidos debe ser un numero entero"),
+body('*.NumeroPedido')
+.notEmpty().withMessage("No se aceptan valores vacios para el NumeroPedido")
+.isInt().withMessage("El NumeroPedido debe ser un numero entero"),
 body('*.CodigoProducto')
 .notEmpty().withMessage("No se aceptan valores vacios para el CodigoProducto")
 .isInt().withMessage("El CodigoProducto debe ser un numero entero"),
@@ -40,8 +40,8 @@ query('idregistro')
 .notEmpty().withMessage('El idregistro es requerido')
 .isInt().withMessage('El idregistro debe ser un numero entero'),
 
-body('NumeroPedidos')
-.notEmpty().withMessage('El NumeroPedidos es requerido'),
+body('NumeroPedido')
+.notEmpty().withMessage('El NumeroPedido es requerido'),
 
 body('CodigoProducto')
 .notEmpty().withMessage('El CodigoProducto es requerido'),

@@ -1,7 +1,9 @@
 /*-----------By: Idaly Manzanares 0209200201095-----------*/ 
 
-const {validationResult} = require('express-validator');
 const modeloPedidosMesa = require('../modelos/modelosPedidosMesa');
+
+const MSJ = require('../componentes/mensajes')
+const validar = require('../componentes/validar')
 
 exports.Inicio = async (req, res) => {
     const listaModulos = [
@@ -23,23 +25,15 @@ exports.Inicio = async (req, res) => {
             modulo:"PedidosMesa",
             ruta:"/api/pedidos/pedidosmesa/guardar",
             metodo:"POST",
-            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
+            parametros:"id,idpedido,idpedidomesa,cuenta,nombrecuenta",
             descripcion:"Guarda un detalle PedidoMesa"
-        },
-        {
-            modulo:"PedidosMesa",
-            ruta:"/api/pedidos/pedidosmesa/guardarbulk",
-            metodo:"POST",
-            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
-            estructura:'[{idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta},{idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta}]',
-            descripcion:"Guarda PedidoMesa en bulk/lotes/granel"
         },
         {
             modulo:"PedidosMesa",
             ruta:"/api/pedidos/pedidosmesa/editar",
             metodo:"PUT",
             query:"id",
-            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
+            parametros:"id,idpedido,idpedidomesa,cuenta,nombrecuenta",
             descripcion:"Actualiza un PedidoMesa"
         },
         {
@@ -66,107 +60,111 @@ exports.Inicio = async (req, res) => {
 exports.Listar = async (req, res) => {
     try {
         const lista = await modeloPedidosMesa.findAll();
-        console.log(lista);
         res.json(lista);
     } catch (error) {
-        console.error(error);
-        res.json(error);
+        msj.estado = 'error';
+        msj.mensaje = 'La Peticion no se ejecuto';
+        msj.errores = error;
+        MSJ(res,500,error)
     }
 };
 
 exports.Guardar = async (req, res) => {
-    // console.log(req.body);
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ' '
-    };  
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.array.forEach(element => {
-             msj.mensaje += element.msg + '. ';
-        });
-    }
-    else {
-        const { idpedido, idregistro } = req.body;
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        const { idpedido, idpedidomesa, cuenta, nombrecuenta } = req.body;
         try {
-            await modeloPedidosLlevar.create(
+            await modeloPedidosMesa.create(
                 {
                     idpedido: idpedido,
-                    idregistro: idregistro
+                    idmesa: idpedidomesa,
+                    cuenta: cuenta,
+                    nombrecuenta: nombrecuenta
                 }
             );
-            msj.mensaje = 'Registro almacenado'
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
-       
     }
-
-    res.json(msj);
-    
-   
 };
 
 exports.Editar = async (req, res) =>{
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ' '
-    };
-    if (validaciones.errors.length > 0) {
-        // validaciones.errors.aÍÍrray.forEach(element => {
-        //     msj.mensaje += element.msg + '. ';
-        // });
-    }
-    else {
-        const idregistro = req.query.id;
-        const { idpedido, cuenta, nombrecuenta } = req.body;
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        const id = req.query.id;
+        const { idpedido, cuenta, nombrecuenta, idpedidomesa, } = req.body;
         try {
             var buscarPedidosMesa = await modeloPedidosMesa.findOne({
                 where: {
-                    idregistro: idregistro
+                    idregistro: id
                 }
             });
             if (!buscarPedidosMesa) {
-                msj.mensaje = 'El id de registro no existe';
+                msj.estado = 'error';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,500,msj);
             } else {
                 buscarPedidosMesa.idpedido = idpedido;
                 buscarPedidosMesa.cuenta = cuenta;
+                buscarPedidosMesa.idmesa = idpedidomesa;
                 buscarPedidosMesa.nombrecuenta = nombrecuenta;
                 await buscarPedidosMesa.save();
-                msj.mensaje = 'Registro Almacenado';
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
             }
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)            
         }
     }
-    res.json(msj);
 }
 
 
 exports.Eliminar = async (req, res) =>{
-    const idregistro = req.query.id;
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj  = {
-        mensaje: "Ninguno"
-    };
-    if (!idregistro){
-        msj.mensaje = 'Debe enviar los datos completos';
-    }
-    else {
-        var eliminarpedidosMesa = await modeloPedidosMesa.destroy({
-            where: {
-                idregistro: idregistro
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        try {
+            const { idregistro } = req.query;
+            var eliminarpedidosMesa = await modeloPedidosMesa.findOne({
+                where: {
+                    idregistro: idregistro
+                }
+            });
+            if (eliminarpedidosMesa) {
+                await eliminarpedidosMesa.destroy();
+                    msj.estado = 'correcto';
+                    msj.mensaje = 'Se ha eliminado el registro correctamente';
+                    msj.errores = '';
+                    MSJ(res,200,msj);   
+            } else {
+                    msj.estado = 'error';
+                    msj.mensaje = 'No se ha encontrado el registro';
+                    msj.errores = '';
+                    MSJ(res,500,msj);
             }
-        });
-        if (eliminarpedidosMesa) {
-            msj.mensaje = 'Peticion Procesada correctamente';    
-        } else {
-            msj.mensaje = 'No se pudo realizar la operacion'; 
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }    
-    res.json(msj);
-    }
+}

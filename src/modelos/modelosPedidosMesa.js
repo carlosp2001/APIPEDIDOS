@@ -17,11 +17,10 @@ const pedidos_mesa = db.define(
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        idpedidomesa:{
+        idmesa:{
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        
         cuenta:{
             type: DataTypes.INTEGER,
             allowNull: false
