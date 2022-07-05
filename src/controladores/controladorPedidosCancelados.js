@@ -65,7 +65,8 @@ exports.Inicio = async (req, res) => {
 }
 
 
-exports.Listar = async(req,res)=>{
+exports.Listar = async (req, res) => {
+    const msj = validar(req);
     try {
         const lista = await modeloPedidosCancelados.findAll();
         res.json(lista);
