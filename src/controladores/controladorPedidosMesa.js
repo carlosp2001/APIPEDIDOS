@@ -23,23 +23,15 @@ exports.Inicio = async (req, res) => {
             modulo:"PedidosMesa",
             ruta:"/api/pedidos/pedidosmesa/guardar",
             metodo:"POST",
-            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
+            parametros:"id,idpedido,idpedidomesa,cuenta,nombrecuenta",
             descripcion:"Guarda un detalle PedidoMesa"
-        },
-        {
-            modulo:"PedidosMesa",
-            ruta:"/api/pedidos/pedidosmesa/guardarbulk",
-            metodo:"POST",
-            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
-            estructura:'[{idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta},{idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta}]',
-            descripcion:"Guarda PedidoMesa en bulk/lotes/granel"
         },
         {
             modulo:"PedidosMesa",
             ruta:"/api/pedidos/pedidosmesa/editar",
             metodo:"PUT",
             query:"id",
-            parametros:"idregistro,idpedido,idpedidomesa,cuenta,nombrecuenta",
+            parametros:"id,idpedido,idpedidomesa,cuenta,nombrecuenta",
             descripcion:"Actualiza un PedidoMesa"
         },
         {
@@ -87,18 +79,21 @@ exports.Guardar = async (req, res) => {
         });
     }
     else {
-        const { idpedido, idregistro } = req.body;
+        const { idpedido, id, idpedidomesa, cuenta, nombrecuenta } = req.body;
         try {
-            await modeloPedidosLlevar.create(
+            await modeloPedidosMesa.create(
                 {
                     idpedido: idpedido,
-                    idregistro: idregistro
+                    id: id,
+                    idpedidomesa: idpedidomesa,
+                    cuenta: cuenta,
+                    nombrecuenta: nombrecuenta
                 }
             );
             msj.mensaje = 'Registro almacenado'
         } catch (error) {
             msj.mensaje = 'Error al guardar los datos';
-            
+            console.log(error);
         }
        
     }
@@ -120,12 +115,12 @@ exports.Editar = async (req, res) =>{
         // });
     }
     else {
-        const idregistro = req.query.id;
+        const id = req.query.id;
         const { idpedido, cuenta, nombrecuenta } = req.body;
         try {
             var buscarPedidosMesa = await modeloPedidosMesa.findOne({
                 where: {
-                    idregistro: idregistro
+                    idregistro: id
                 }
             });
             if (!buscarPedidosMesa) {
@@ -147,19 +142,19 @@ exports.Editar = async (req, res) =>{
 
 
 exports.Eliminar = async (req, res) =>{
-    const idregistro = req.query.id;
+    const id = req.query.id;
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
     const msj  = {
         mensaje: "Ninguno"
     };
-    if (!idregistro){
+    if (!id){
         msj.mensaje = 'Debe enviar los datos completos';
     }
     else {
         var eliminarpedidosMesa = await modeloPedidosMesa.destroy({
             where: {
-                idregistro: idregistro
+                idregistro: id
             }
         });
         if (eliminarpedidosMesa) {
