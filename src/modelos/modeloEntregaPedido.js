@@ -1,6 +1,6 @@
 const {DataTypes}=require('sequelize')
 const db = require('../configuraciones/db')
-
+const detalle_pedido = require('./modeloDetallePedidos')
 
 const entrega_pedido = db.define(
     'entrega_pedido',
@@ -28,6 +28,16 @@ const entrega_pedido = db.define(
         timestamps: false //para no agg campos de la fecha actual
     }
 );
+
+
+detalle_pedido.hasMany(entrega_pedido, {
+    foreignKey: 'iddetallepedido',
+    otherKey: 'idregistro'
+});
+entrega_pedido.belongsTo(detalle_pedido, {
+    foreignKey: 'iddetallepedido',
+    otherKey: 'iddetallepedido'
+});
 
 //con el sync creamos la trabla desde el visual
 entrega_pedido.sync().then(

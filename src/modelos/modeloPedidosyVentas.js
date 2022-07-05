@@ -23,22 +23,22 @@ const pedidos_x_ventas = db.define(
   }
 );
 
-pedidos.hasMany(PedidosyVentas, {
+pedidos.hasMany(pedidos_x_ventas, {
   foreignKey: 'NumeroPedido',
   otherKey: 'NumeroPedido'
 });
 
-PedidosyVentas.belongsTo(pedidos, {
+pedidos_x_ventas.belongsTo(pedidos, {
   foreignKey: 'NumeroPedido',
   otherKey: 'NumeroPedido'
 });
 
-/* facturas.hasMany(PedidosyVentas, {
+/* facturas.hasMany(pedidos_x_ventas, {
   foreignKey: 'NumeroFactura',
   otherKey: 'NumeroFactura'
 });
 
-PedidosyVentas.belongsTo(facturas, {
+pedidos_x_ventas.belongsTo(facturas, {
   foreignKey: 'NumeroFactura',
   otherKey: 'NumeroFactura'
 });
