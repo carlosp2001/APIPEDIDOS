@@ -7,4 +7,5 @@ rutas.use('/pedidoscancelados', require('./rutasPedidosCancelados'));
 rutas.use('/pedidoselaborados', require('./rutaspedidoselaborados'));
 rutas.use('/pedidosmesa', require('./rutasPedidosMesa'));
 rutas.use('/pedidosyventas', require('./rutasPedidosyVentas'));
+rutas.use('/entregapedido', require('./rutasEntregaPedido'));
 module.exports = rutas;
