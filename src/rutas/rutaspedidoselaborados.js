@@ -7,8 +7,8 @@ const rutas = Router();
 
 
 //*Listar
-rutas.get('/', controladorpedidoselab.Inicio)
 rutas.get('/listar', controladorpedidoselaborados.Listar);
+rutas.get('/', controladorpedidoselaborados.Inicio)
 
 
 //*Guardar

@@ -112,51 +112,53 @@ exports.Eliminar = async (req, res) => {
     }
     res.json(msj.mensaje);
 
-    exports.Inicio = async (req, res)=>{
-        var msj = validacion(req);
-        const modeloPedidosElaborados = [
-            {modulo: "Pedidos Elaborados",
-                ruta: "/api/pedidoselaborados", 
-                metodo: "GET",
-                parametros: "",
-                descripcion: "Inicio del modulo pedidos elaborados"},
-            {modulo: "Pedidos Elaborados listar",
-                ruta: "/api/pedidoselaborados/listar",
-                metodo: "GET",
-                descripcion: "Lista los pedidos elaborados"
-            },
-            {modulo: "Pedidos Elaborados guardar",
-                ruta: "/api/pedidoselaborados/guardar",
-                metodo: "POST",
-                parametros: "iddetallepedido, idusuario",
-                descripcion: "Guarda los pedidos elaborados"
-            },
-            {modulo: "Pedidos Elaborados editar",
-                ruta: "/api/pedidoselaborados/editar",
-                metodo: "PUT",
-                query: "id",
-                parametros: "iddetallepedido, idusuario, fechahora",
-                descripcion: "Edita los pedidos elaborados"
-            },
-            {modulo: "Pedidos Elaborados eliminar",
-                ruta: "/api/pedidoselaborados/eliminar",
-                metodo: "DEL",
-                query: "id",
-                descripcion: "Elimina los pedidos elaborados"
-            },
-        ];
+}
 
-        const datos = {
-            api: "API-SIFCON",
-            segmento: "Pedidos Elaborados",
-            descripcion: "CRUD DE PEDIDOS ELABORADOS",
-            propiedad: "SIGRES",
-            desarrollador: "Oscar Andree Varela Godoy",
-            colaboradores: "",
-            fecha: "30/06/2022",
-            listamodulos
-        };
-        res.json(datos);
-    }
 
+
+exports.Inicio = async (req, res)=>{
+    var msj = validacion(req);
+    const modeloPedidosElaborados = [
+        {modulo: "Pedidos Elaborados",
+            ruta: "/api/pedidoselaborados", 
+            metodo: "GET",
+            parametros: "",
+            descripcion: "Inicio del modulo pedidos elaborados"},
+        {modulo: "Pedidos Elaborados listar",
+            ruta: "/api/pedidoselaborados/listar",
+            metodo: "GET",
+            descripcion: "Lista los pedidos elaborados"
+        },
+        {modulo: "Pedidos Elaborados guardar",
+            ruta: "/api/pedidoselaborados/guardar",
+            metodo: "POST",
+            parametros: "iddetallepedido, idusuario",
+            descripcion: "Guarda los pedidos elaborados"
+        },
+        {modulo: "Pedidos Elaborados editar",
+            ruta: "/api/pedidoselaborados/editar",
+            metodo: "PUT",
+            query: "id",
+            parametros: "iddetallepedido, idusuario, fechahora",
+            descripcion: "Edita los pedidos elaborados"
+        },
+        {modulo: "Pedidos Elaborados eliminar",
+            ruta: "/api/pedidoselaborados/eliminar",
+            metodo: "DEL",
+            query: "id",
+            descripcion: "Elimina los pedidos elaborados"
+        },
+    ];
+
+    const datos = {
+        api: "API-SIFCON",
+        segmento: "Pedidos Elaborados",
+        descripcion: "CRUD DE PEDIDOS ELABORADOS",
+        propiedad: "SIGRES",
+        desarrollador: "Oscar Andree Varela Godoy",
+        colaboradores: "",
+        fecha: "30/06/2022",
+        listamodulos
+    };
+    res.json(datos);
 }
