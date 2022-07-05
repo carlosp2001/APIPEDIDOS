@@ -132,15 +132,9 @@ exports.Editar = async (req, res) => {
 }
 
 exports.Eliminar = async (req, res) => {
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ''
-    };
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.forEach(error => {
-            msj.mensaje += error.msg + '. ';
-        });
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
     }else{
         const {id} = req.query; //la id es la que se envia en el query
         try { 
