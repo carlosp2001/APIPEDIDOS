@@ -1,7 +1,9 @@
 /*-----------By: Idaly Manzanares 0209200201095-----------*/ 
 
-const {validationResult} = require('express-validator');
 const modeloPedidosMesa = require('../modelos/modelosPedidosMesa');
+
+const MSJ = require('../componentes/mensajes')
+const validar = require('../componentes/validar')
 
 exports.Inicio = async (req, res) => {
     const listaModulos = [
@@ -58,27 +60,20 @@ exports.Inicio = async (req, res) => {
 exports.Listar = async (req, res) => {
     try {
         const lista = await modeloPedidosMesa.findAll();
-        console.log(lista);
         res.json(lista);
     } catch (error) {
-        console.error(error);
-        res.json(error);
+        msj.estado = 'error';
+        msj.mensaje = 'La Peticion no se ejecuto';
+        msj.errores = error;
+        MSJ(res,500,error)
     }
 };
 
 exports.Guardar = async (req, res) => {
-    // console.log(req.body);
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ' '
-    };  
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.array.forEach(element => {
-             msj.mensaje += element.msg + '. ';
-        });
-    }
-    else {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
         const { idpedido, id, idpedidomesa, cuenta, nombrecuenta } = req.body;
         try {
             await modeloPedidosMesa.create(
@@ -90,31 +85,24 @@ exports.Guardar = async (req, res) => {
                     nombrecuenta: nombrecuenta
                 }
             );
-            msj.mensaje = 'Registro almacenado'
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            console.log(error);
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
-       
     }
-
-    res.json(msj);
-    
-   
 };
 
 exports.Editar = async (req, res) =>{
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ' '
-    };
-    if (validaciones.errors.length > 0) {
-        // validaciones.errors.aÍÍrray.forEach(element => {
-        //     msj.mensaje += element.msg + '. ';
-        // });
-    }
-    else {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
         const id = req.query.id;
         const { idpedido, cuenta, nombrecuenta } = req.body;
         try {
@@ -124,44 +112,58 @@ exports.Editar = async (req, res) =>{
                 }
             });
             if (!buscarPedidosMesa) {
-                msj.mensaje = 'El id de registro no existe';
+                msj.estado = 'error';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,500,msj);
             } else {
                 buscarPedidosMesa.idpedido = idpedido;
                 buscarPedidosMesa.cuenta = cuenta;
                 buscarPedidosMesa.nombrecuenta = nombrecuenta;
                 await buscarPedidosMesa.save();
-                msj.mensaje = 'Registro Almacenado';
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
             }
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)            
         }
     }
-    res.json(msj);
 }
 
 
 exports.Eliminar = async (req, res) =>{
-    const id = req.query.id;
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj  = {
-        mensaje: "Ninguno"
-    };
-    if (!id){
-        msj.mensaje = 'Debe enviar los datos completos';
-    }
-    else {
-        var eliminarpedidosMesa = await modeloPedidosMesa.destroy({
-            where: {
-                idregistro: id
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        try {
+            var eliminarpedidosMesa = await modeloPedidosMesa.findOne({
+                where: {
+                    idregistro: id
+                }
+            });
+            if (eliminarpedidosMesa) {
+                await eliminarpedidosMesa.destroy();
+                    msj.estado = 'correcto';
+                    msj.mensaje = 'Se ha eliminado el registro correctamente';
+                    msj.errores = '';
+                    MSJ(res,200,msj);   
+            } else {
+                    msj.estado = 'error';
+                    msj.mensaje = 'No se ha encontrado el registro';
+                    msj.errores = '';
+                    MSJ(res,500,msj);
             }
-        });
-        if (eliminarpedidosMesa) {
-            msj.mensaje = 'Peticion Procesada correctamente';    
-        } else {
-            msj.mensaje = 'No se pudo realizar la operacion'; 
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }    
-    res.json(msj);
-    }
+}
