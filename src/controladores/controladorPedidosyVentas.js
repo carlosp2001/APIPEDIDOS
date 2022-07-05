@@ -1,4 +1,6 @@
-const {validationResult} = require('express-validator');
+const MSJ = require('../componentes/mensajes')
+const validar = require('../componentes/validar')
+
 const modeloPedidosyVentas = require('../modelos/modeloPedidosyVentas.js');
 
 exports.Inicio = async (req, res) => {
@@ -67,27 +69,20 @@ exports.Inicio = async (req, res) => {
 exports.Listar = async (req, res) => {
     try {
         const lista = await modeloPedidosyVentas.findAll();
-        console.log(lista);
         res.json(lista);
     } catch (error) {
-        console.error(error);
-        res.json(error);
+        msj.estado = 'error';
+        msj.mensaje = 'La Peticion no se ejecuto';
+        msj.errores = error;
+        MSJ(res,500,error)
     }
 };
 
 exports.Guardar = async (req, res) => {
-    // console.log(req.body);
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ' '
-    };  
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.array.forEach(element => {
-            msj.mensaje += element.msg + '. ';
-        });
-    }
-    else {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
         const { NumeroFactura, NumeroPedido } = req.body;
         try {
             await modeloPedidosyVentas.create(
@@ -96,60 +91,50 @@ exports.Guardar = async (req, res) => {
                     NumeroPedido: NumeroPedido
                 }
             );
-            msj.mensaje = 'Registro almacenado'
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
-       
     }
-
-    res.json(msj);
-    
-   
 };
 
 exports.GuardarBulk = async (req, res) => {
-    // console.log(req.body);
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: []
-    };  
-    if (validaciones.errors.length > 0) {
-        msj.mensaje = validaciones.errors;
-    }
-    else {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
         const pedidosyVentas = req.body;
         try {
             await modeloPedidosyVentas.bulkCreate(
                 pedidosyVentas
             )
-            msj.mensaje = 'Registro almacenado'
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado los registros correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     
     }
-
-    res.json(msj);
     
 };
 
 
 exports.Editar = async (req, res) =>{
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ' '
-    };
-    if (validaciones.errors.length > 0) {
-        // validaciones.errors.aÍÍrray.forEach(element => {
-        //     msj.mensaje += element.msg + '. ';
-        // });
-    }
-    else {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
         // const NumeroFactura = req.query.id;
         const { NumeroFactura, NumeroPedido } = req.body;
         try {
@@ -159,43 +144,50 @@ exports.Editar = async (req, res) =>{
                 }
             });
             if (!buscarPedidosLlevar) {
-                msj.mensaje = 'El id de registro no existe';
+                msj.estado = 'error';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,500,msj); 
             } else {
                 buscarPedidosLlevar.NumeroFactura = NumeroFactura;
                 buscarPedidosLlevar.NumeroPedido = NumeroPedido;
                 await buscarPedidosLlevar.save();
-                msj.mensaje = 'Registro Almacenado';
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha modificado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
             }
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)         
         }
     }
-    res.json(msj);
 }
 
 
 exports.Eliminar = async (req, res) =>{
-    const NumeroFactura = req.query.id;
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj  = {
-        mensaje: "Ninguno"
-    };
-    if (!NumeroFactura){
-        msj.mensaje = 'Debe enviar los datos completos';
-    }
-    else {
-        var eliminarPedidosyVentas = await modeloPedidosyVentas.destroy({
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        var eliminarPedidosyVentas = await modeloPedidosyVentas.findOne({
             where: {
                 NumeroFactura: NumeroFactura
             }
         });
         if (eliminarPedidosyVentas) {
-            msj.mensaje = 'Peticion Procesada correctamente';    
+            await eliminarPedidosyVentas.destroy();
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha eliminado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);   
         } else {
-            msj.mensaje = 'No se pudo realizar la operacion'; 
+            msj.estado = 'error';
+            msj.mensaje = 'No se ha encontrado el registro';
+            msj.errores = '';
+            MSJ(res,500,msj);
         }
     }    
-    res.json(msj);
-    }
+}
