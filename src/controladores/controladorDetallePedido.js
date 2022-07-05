@@ -4,6 +4,66 @@ const modeloDetallePedidos = require('../modelos/modeloDetallePedidos');
 const MSJ = require('../componentes/mensajes')
 const validar = require('../componentes/validar')
 
+exports.Inicio = async (req, res) => {
+    const listaModulos = [
+        {
+            modulo:"DetallePedidos",
+            ruta:"/api/pedidos/detallepedidos",
+            metodo:"GET",
+            parametros:"",
+            descripcion:"Inicio del módulo DetallePedidos"
+        },
+        {
+            modulo:"DetallePedidos",
+            ruta:"/api/pedidos/detallepedidos/listar",
+            metodo:"GET",
+            parametros:"",
+            descripcion:"Lista todos los DetallePedidos"
+        },
+        {
+            modulo:"DetallePedidos",
+            ruta:"/api/pedidos/detallepedidos/guardar",
+            metodo:"POST",
+            parametros:"NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
+            descripcion:"Guarda un detalle pedido"
+        },
+        {
+            modulo:"DetallePedidos",
+            ruta:"/api/pedidos/detallepedidos/guardarbulk",
+            metodo:"POST",
+            parametros:"NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
+            estructura:'[{NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado},{NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado}]',
+            descripcion:"Guarda DetallesPedido en bulk/lotes/granel"
+        },
+        {
+            modulo:"DetallePedidos",
+            ruta:"/api/pedidos/detallepedidos/editar",
+            metodo:"PUT",
+            query:"id",
+            parametros:"NumeroPedidos,CodigoProducto,Cantidad,Notas,subproducto,Cancelado,Elaborado,Entregado,Facturado",
+            descripcion:"Actualiza un DetallePedido"
+        },
+        {
+            modulo:"DetallePedidos",
+            ruta:"/api/pedidos/detallepedidos/editar",
+            metodo:"DELETE",
+            query:"id",
+            descripcion:"Elimina un DetallePedido"
+        }
+    ]
+    const datos = {
+        api:"API-SIGRES",
+        segmento:"DetallePedidos",
+        descripcion:"CRUD para DetallePedidos",
+        propiedad:"Sistemas SIGRES",
+        desarrollador:"Javier Raul Tabora Castejon",
+        colaboradores:"",
+        fecha:"30/06/2022",
+        listaModulos
+    }
+    res.json(datos);
+}
+
 exports.Listar = async (req, res) => {
     try {
         const lista = await modeloDetallePedidos.findAll();
@@ -45,6 +105,29 @@ exports.Guardar = async (req, res) => {
         }
     }
 }
+
+exports.GuardarBulk = async (req, res) => {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        const DetallePedido = req.body;
+        try {
+            await modeloDetallePedidos.bulkCreate(
+                DetallePedido
+            )
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
+        }
+    }    
+};
 
 exports.Editar = async (req, res) => {
     const msj = validar(req);
@@ -126,13 +209,13 @@ exports.Eliminar = async (req, res) => {
     }
 }
 
-exports.EstadoCancelado = async (req, res) => {
+exports.EstadoCancelado = async (estado, id) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
     }else{
-        const {idregistro} = req.query;
-        const {Cancelado} = req.body;
+        const {idregistro} = id;
+        const {Cancelado} = estado;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -147,30 +230,30 @@ exports.EstadoCancelado = async (req, res) => {
                 msj.estado = 'correcto';
                 msj.mensaje = 'Se ha guardado el registro correctamente';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }
             
         } catch (error) {
             msj.estado = 'error';
             msj.mensaje = 'La Peticion no se ejecuto';
             msj.errores = error;
-            MSJ(res,500,error)
+            return(msj)
         }
     }
 }
 
-exports.EstadoElaborado = async (req, res) => {
+exports.EstadoElaborado = async (estado, id) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
     }else{
-        const {idregistro} = req.query;
-        const {Elaborado} = req.body;
+        const {idregistro} = id;
+        const {Elaborado} = estado;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -184,31 +267,28 @@ exports.EstadoElaborado = async (req, res) => {
 
                 msj.estado = 'correcto';
                 msj.mensaje = 'Se ha guardado el registro correctamente';
-                msj.errores = '';
-                MSJ(res,200,msj);
+                msj.errores = '';                
+                return(msj)
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
-                msj.errores = '';
-                MSJ(res,200,msj);
+                msj.errores = '';                
+                return(msj)
             }
             
         } catch (error) {
-            msj.estado = 'error';
-            msj.mensaje = 'La Peticion no se ejecuto';
-            msj.errores = error;
-            MSJ(res,500,error)
+            return(msj)
         }
     }
 }
 
-exports.EstadoEntregado = async (req, res) => {
+exports.EstadoEntregado = async (estado, id) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
-        MSJ(res,200,msj);
+        return(msj);
     }else{
-        const {idregistro} = req.query;
-        const {Entregado} = req.body;
+        const {idregistro} = id;
+        const {Entregado} = estado;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -223,30 +303,30 @@ exports.EstadoEntregado = async (req, res) => {
                 msj.estado = 'correcto';
                 msj.mensaje = 'Se ha guardado el registro correctamente';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }
             
         } catch (error) {
             msj.estado = 'error';
             msj.mensaje = 'La Peticion no se ejecuto';
             msj.errores = error;
-            MSJ(res,500,error)
+            return(msj)
         }
     }
 }
 
-exports.EstadoFacturado = async (req, res) => {
+exports.EstadoFacturado = async (estado, id) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
     }else{
-        const {idregistro} = req.query;
-        const {Facturado} = req.body;
+        const {idregistro} = id;
+        const {Facturado} = estado;
         
         try {
             var buscarDetallePedido = await modeloDetallePedidos.findOne({
@@ -261,19 +341,19 @@ exports.EstadoFacturado = async (req, res) => {
                 msj.estado = 'correcto';
                 msj.mensaje = 'Se ha guardado el registro correctamente';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }else{
-                msj.estado = 'ERROR';
+                msj.estado = 'error';
                 msj.mensaje = 'No se ha encontrado el registro';
                 msj.errores = '';
-                MSJ(res,200,msj);
+                return(msj)
             }
             
         } catch (error) {
             msj.estado = 'error';
             msj.mensaje = 'La Peticion no se ejecuto';
             msj.errores = error;
-            MSJ(res,500,error)
+            return(msj)
         }
     }
 }
