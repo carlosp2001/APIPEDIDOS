@@ -1,6 +1,8 @@
 //modulo trabajado por francis lara.
-const {validationResult} = require('express-validator');
 const modeloPedidosCancelados = require('../modelos/modeloPedidosCancelados');
+
+const MSJ = require('../componentes/mensajes')
+const validar = require('../componentes/validar')
 
 exports.Inicio = async (req, res) => {
     const listaModulos = [
@@ -56,52 +58,45 @@ exports.Inicio = async (req, res) => {
 
 
 exports.Listar = async(req,res)=>{
-        try {
-            const lista = await modeloPedidosCancelados.findAll();
-            console.log(lista);
-            res.json(lista);
-        } catch (error) {
-            console.error(error);
-            res.json(error);
-        }
+    try {
+        const lista = await modeloPedidosCancelados.findAll();
+        res.json(lista);
+    } catch (error) {
+        msj.estado = 'error';
+        msj.mensaje = 'La Peticion no se ejecuto';
+        msj.errores = error;
+        MSJ(res,500,error)
+    }
 }
 
 exports.Guardar = async (req, res)=>{
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje:''
-    };
-    if (validaciones.errors.length > 0){
-        validaciones.errors.forEach(error =>{
-            msj.mensaje +=error.msg + '. ';
-        });
-    }
-    else{
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else{
         const {numeropedido, usuario} = req.body;
         try {
             await modeloPedidosCancelados.create({
                 numeropedido: numeropedido, //izquierda, como esta en la tabla
                 usuario: usuario
             });
-            msj.mensaje = 'pedido cancelado correctamente';
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
         } catch (error) {
-            msj.mensaje = 'error al crear un nuevo pedido cancelado'
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }
-    res.json(msj.mensaje);
 }
 
 exports.Editar = async (req, res) => {
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ''
-    };
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.forEach(error => {
-            msj.mensaje += error.msg + '. ';
-        });
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
     }else{
         const {id} = req.query;
         const {usuario, fechahora} = req.body;
@@ -112,20 +107,28 @@ exports.Editar = async (req, res) => {
                 }
             });       
             if(!buscarPedido){
-                msj.mensaje = 'No se ha encontrado un pedido cancelado con el ID ' + id;
+                msj.estado = 'error';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,500,msj);
             }
             else{
                 buscarPedido.usuario = usuario;
                 buscarPedido.fechahora = fechahora;
                 await buscarPedido.save();
 
-                msj.mensaje = 'El pedido cancelado se actualizo correctamente';
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha modificado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
             }
         } catch (error) {
-            msj.mensaje = 'Error al actualizar el pedido cancelado';
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }
-    res.json(msj.mensaje);
 }
 
 exports.Eliminar = async (req, res) => {
@@ -147,19 +150,27 @@ exports.Eliminar = async (req, res) => {
                 }
             });       
             if(!buscarPedido){
-                msj.mensaje = 'No se ha encontrado un pedido cancelado con el ID ' + id;
+                msj.estado = 'error';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,500,msj);
             }
             else{
                 await buscarPedido.destroy({
                     where: {
                         numeropedido : id
                     }
-                });
+                });                
+                msj.estado = 'correcto';
                 msj.mensaje = 'Pedido cancelado eliminado correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
             }
         } catch (error) {
-            msj.mensaje = 'Error al borrar el pedido cancelado';
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }
-    res.json(msj.mensaje);
 }
