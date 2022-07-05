@@ -79,7 +79,7 @@ exports.Listar = async (req, res) => {
 exports.Guardar = async (req, res) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
-        MSJ(res,200,msj);
+        MSJ(res,500,msj);
     }else{
         const {NumeroPedidos, CodigoProducto, Cantidad, Notas, subproducto, Cancelado,Elaborado,Entregado,Facturado} = req.body;
         try {
