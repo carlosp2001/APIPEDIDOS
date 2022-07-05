@@ -1,6 +1,8 @@
-const {validationResult} = require('express-validator');
 const { DATE } = require('sequelize');
 const modeloPedidosLlevar = require('../modelos/modeloPedidosLlevar');
+
+const MSJ = require('../componentes/mensajes')
+const validar = require('../componentes/validar')
 
 exports.Inicio = async (req, res) => {
     const listaModulos = [
@@ -61,24 +63,18 @@ exports.Listar = async (req, res) => {
         console.log(lista);
         res.json(lista);
     } catch (error) {
-        console.error(error);
-        res.json(error);
+        msj.estado = 'error';
+        msj.mensaje = 'La Peticion no se ejecuto';
+        msj.errores = error;
+        MSJ(res,500,error)
     }
 };
 
 exports.Guardar = async (req, res) => {
-    // console.log(req.body);
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ' '
-    };  
-    if (validaciones.errors.length > 0) {
-        validaciones.errors.array.forEach(element => {
-             msj.mensaje += element.msg + '. ';
-        });
-    }
-    else {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
         const { idpedido, idcliente } = req.body;
         try {
             await modeloPedidosLlevar.create(
@@ -87,31 +83,26 @@ exports.Guardar = async (req, res) => {
                     idcliente: idcliente
                 }
             );
-            msj.mensaje = 'Registro almacenado'
+            msj.estado = 'correcto';
+            msj.mensaje = 'Se ha guardado el registro correctamente';
+            msj.errores = '';
+            MSJ(res,200,msj);
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
-       
     }
 
     res.json(msj);
-    
-   
 };
 
 exports.Editar = async (req, res) =>{
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj = {
-        mensaje: ' '
-    };
-    if (validaciones.errors.length > 0) {
-        // validaciones.errors.aÍÍrray.forEach(element => {
-        //     msj.mensaje += element.msg + '. ';
-        // });
-    }
-    else {
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
         const idregistro = req.query.id;
         const { idpedido, idcliente } = req.body;
         try {
@@ -121,43 +112,57 @@ exports.Editar = async (req, res) =>{
                 }
             });
             if (!buscarPedidosLlevar) {
-                msj.mensaje = 'El id de registro no existe';
+                msj.estado = 'ERROR';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,200,msj);
             } else {
                 buscarPedidosLlevar.idpedido = idpedido;
                 buscarPedidosLlevar.idcliente = idcliente;
                 await buscarPedidosLlevar.save();
-                msj.mensaje = 'Registro Almacenado';
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);
             }
         } catch (error) {
-            msj.mensaje = 'Error al guardar los datos';
-            
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
     }
-    res.json(msj);
 }
 
 
 exports.Eliminar = async (req, res) =>{
-    const id = req.query.id;
-    const validaciones = validationResult(req);
-    console.log(validaciones.errors);
-    const msj  = {
-        mensaje: "Ninguno"
-    };
-    if (!id){
-        msj.mensaje = 'Debe enviar los datos completos';
-    }
-    else {
-        var eliminarpedidosllevar = await modeloPedidosLlevar.destroy({
-            where: {
-                idregistro: id
+    const msj = validar(req);
+    if(msj.errores.length > 0){
+        MSJ(res,200,msj);
+    }else {
+        try {
+            var eliminarpedidosllevar = await modeloPedidosLlevar.findOne({
+                where: {
+                    idregistro: id
+                }
+            });
+            if (eliminarpedidosllevar) {
+                await eliminarpedidosllevar.destroy();
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha eliminado el registro correctamente';
+                msj.errores = '';
+                MSJ(res,200,msj);    
+            } else {
+                msj.estado = 'ERROR';
+                msj.mensaje = 'No se ha encontrado el registro';
+                msj.errores = '';
+                MSJ(res,500,msj); 
             }
-        });
-        if (eliminarpedidosllevar) {
-            msj.mensaje = 'Peticion Procesada correctamente';    
-        } else {
-            msj.mensaje = 'No se pudo realizar la operacion'; 
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La Peticion no se ejecuto';
+            msj.errores = error;
+            MSJ(res,500,error)
         }
-    }    
-    res.json(msj);
-    }
+    }   
+}
