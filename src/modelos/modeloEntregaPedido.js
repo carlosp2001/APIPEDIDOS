@@ -41,8 +41,8 @@ pedidosdetalle.hasMany(entrega_pedido, {
 });
 
 //con el sync creamos la trabla desde el visual
-// entrega_pedido.sync().then(
-//     () => console.log("Sincronizacion Completa")
-// );
+entrega_pedido.sync().then(
+    () => console.log("Sincronizacion Completa")
+);
 
 module.exports = entrega_pedido;

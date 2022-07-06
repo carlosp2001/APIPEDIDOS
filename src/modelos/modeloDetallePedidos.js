@@ -68,8 +68,8 @@ detalle_pedido.belongsTo(pedidos, {
     otherKey: 'NumeroPedido'
 });
 
-// detalle_pedido.sync().then(
-//     () => console.log("Sincronizacion Completa")
-// );
+detalle_pedido.sync().then(
+    () => console.log("Sincronizacion Completa")
+);
 
 module.exports = detalle_pedido;

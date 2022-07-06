@@ -42,7 +42,7 @@ const Pedido = db.define(
     }
 );
 
-// Pedido.sync()
-// .then(() => console.log('Tabla creada'));
+Pedido.sync()
+.then(() => console.log('Tabla creada'));
 
 module.exports = Pedido;

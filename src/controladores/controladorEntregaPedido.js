@@ -1,5 +1,5 @@
 const modeloEntregaPedido = require('../modelos/modeloEntregaPedido');
-
+const modeloDetallePedidos = require('../modelos/modeloDetallePedidos')
 const MSJ = require('../componentes/mensajes')
 const validar = require('../componentes/validar')
 
@@ -79,23 +79,34 @@ exports.Guardar = async (req, res) => {
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
     }else{
-        const {iddetalle_pedido, usuario,fechahora,identrega} = req.body;
-        try {            
-            await modeloEntregaPedido.create({
-                iddetalle_pedido,
-                usuario,
-                fechahora,
-                identrega
-            });
-            msj.estado = 'correcto';
-            msj.mensaje = 'Se ha guardado el registro correctamente';
-            msj.errores = '';
-            MSJ(res,200,msj);
-        } catch (error) {
+        const { iddetalle_pedido, usuario, fechahora, identrega } = req.body;
+        var buscarDetallePedido = await modeloDetallePedidos.findOne({
+            where: {
+              idregistro: iddetalle_pedido,
+            },
+        });
+        if (buscarDetallePedido) {
+            try {
+                await modeloEntregaPedido.create({
+                    iddetalle_pedido,
+                    usuario,
+                    fechahora,
+                    identrega
+                });
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res, 200, msj);
+            } catch (error) {
+                msj.estado = 'error';
+                msj.mensaje = 'La Peticion no se ejecuto';
+                msj.errores = error;
+                MSJ(res, 500, error)
+            }
+        } else {
             msj.estado = 'error';
-            msj.mensaje = 'La Peticion no se ejecuto';
-            msj.errores = error;
-            MSJ(res,500,error)
+            msj.mensaje = 'El Id de detalle pedido no existe';
+            MSJ(res, 500, msj)
         }
     }
 }
@@ -104,7 +115,7 @@ exports.GuardarBulk = async (req, res) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
-    }else {
+    } else {
         const entregaPedido = req.body;
         try {
             await modeloEntregaPedido.bulkCreate(

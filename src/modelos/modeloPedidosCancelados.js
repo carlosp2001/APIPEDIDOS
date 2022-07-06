@@ -46,9 +46,9 @@ pedidos_cancelados.belongsTo(usuarios, {
     foreignKey: 'idregistro',
     otherKey: 'usuario'
 }); */
-// pedidos_cancelados.sync().then(
-//     () => console.log("Sincronizacion completa")
-// );
+pedidos_cancelados.sync().then(
+    () => console.log("Sincronizacion completa")
+);
 
 
 module.exports = pedidos_cancelados;

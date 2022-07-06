@@ -1,5 +1,6 @@
 const { DATE } = require('sequelize');
 const modeloPedidosLlevar = require('../modelos/modeloPedidosLlevar');
+const modeloPedidos = require('../modelos/modeloPedidos');
 
 const MSJ = require('../componentes/mensajes')
 const validar = require('../componentes/validar')
@@ -75,24 +76,35 @@ exports.Guardar = async (req, res) => {
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
-    }else {
+    } else {
         const { idpedido, idcliente } = req.body;
-        try {
-            await modeloPedidosLlevar.create(
-                {
-                    idpedido: idpedido,
-                    idcliente: idcliente
-                }
-            );
-            msj.estado = 'correcto';
-            msj.mensaje = 'Se ha guardado el registro correctamente';
-            msj.errores = '';
-            MSJ(res,200,msj);
-        } catch (error) {
-            msj.estado = 'error';
-            msj.mensaje = 'La Peticion no se ejecuto';
-            msj.errores = error;
-            MSJ(res,500,error)
+        var buscarPedido = await modeloPedidos.findOne({
+            where: {
+              NumeroPedido: idpedido,
+            },
+        });
+        if (buscarPedido) {
+            try {
+                await modeloPedidosLlevar.create(
+                    {
+                        idpedido: idpedido,
+                        idcliente: idcliente
+                    }
+                );
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res, 200, msj);
+            } catch (error) {
+                msj.estado = 'error';
+                msj.mensaje = 'La Peticion no se ejecuto';
+                msj.errores = error;
+                MSJ(res, 500, error)
+            }
+        } else {
+            msj.estado = "error";
+            msj.mensaje = "El id de pedido no existe";
+            MSJ(res, 500, msj);
         }
     }
 };
@@ -101,34 +113,48 @@ exports.Editar = async (req, res) =>{
     const msj = validar(req);
     if(msj.errores.length > 0){
         MSJ(res,200,msj);
-    }else {
+    } else {
+        
         const idregistro = req.query.id;
         const { idpedido, idcliente } = req.body;
-        try {
-            var buscarPedidosLlevar = await modeloPedidosLlevar.findOne({
-                where: {
-                    idregistro: idregistro
+
+        var buscarPedido = await modeloPedidos.findOne({
+            where: {
+              NumeroPedido: idpedido,
+            },
+        });
+        if (buscarPedido) {
+
+            try {
+                var buscarPedidosLlevar = await modeloPedidosLlevar.findOne({
+                    where: {
+                        idregistro: idregistro
+                    }
+                });
+                if (!buscarPedidosLlevar) {
+                    msj.estado = 'ERROR';
+                    msj.mensaje = 'No se ha encontrado el registro';
+                    msj.errores = '';
+                    MSJ(res, 200, msj);
+                } else {
+                    buscarPedidosLlevar.idpedido = idpedido;
+                    buscarPedidosLlevar.idcliente = idcliente;
+                    await buscarPedidosLlevar.save();
+                    msj.estado = 'correcto';
+                    msj.mensaje = 'Se ha guardado el registro correctamente';
+                    msj.errores = '';
+                    MSJ(res, 200, msj);
                 }
-            });
-            if (!buscarPedidosLlevar) {
-                msj.estado = 'ERROR';
-                msj.mensaje = 'No se ha encontrado el registro';
-                msj.errores = '';
-                MSJ(res,200,msj);
-            } else {
-                buscarPedidosLlevar.idpedido = idpedido;
-                buscarPedidosLlevar.idcliente = idcliente;
-                await buscarPedidosLlevar.save();
-                msj.estado = 'correcto';
-                msj.mensaje = 'Se ha guardado el registro correctamente';
-                msj.errores = '';
-                MSJ(res,200,msj);
+            } catch (error) {
+                msj.estado = 'error';
+                msj.mensaje = 'La Peticion no se ejecuto';
+                msj.errores = error;
+                MSJ(res, 500, error)
             }
-        } catch (error) {
-            msj.estado = 'error';
-            msj.mensaje = 'La Peticion no se ejecuto';
-            msj.errores = error;
-            MSJ(res,500,error)
+        } else {
+                        msj.estado = "error";
+            msj.mensaje = "El id de pedido no existe";
+            MSJ(res, 500, msj);
         }
     }
 }

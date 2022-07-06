@@ -81,26 +81,39 @@ exports.Listar = async (req, res) => {
 
 exports.Guardar = async (req, res) => {
     const msj = validar(req);
-    if(msj.errores.length > 0){
-        MSJ(res,200,msj);
-    }else {
+    if (msj.errores.length > 0) {
+        MSJ(res, 200, msj);
+    } else {
         const { NumeroFactura, NumeroPedido } = req.body;
-        try {
-            await modeloPedidosyVentas.create(
-                {
-                    NumeroFactura: NumeroFactura,
-                    NumeroPedido: NumeroPedido
-                }
-            );
-            msj.estado = 'correcto';
-            msj.mensaje = 'Se ha guardado el registro correctamente';
-            msj.errores = '';
-            MSJ(res,200,msj);
-        } catch (error) {
+        var buscarCoincidencia = await modeloPedidosyVentas.findOne({
+            where: {
+                NumeroFactura: NumeroFactura,
+                NumeroPedido: NumeroPedido
+            },
+        });
+        if (!buscarCoincidencia) {
+            try {
+                await modeloPedidosyVentas.create(
+                    {
+                        NumeroFactura: NumeroFactura,
+                        NumeroPedido: NumeroPedido
+                    }
+                );
+                msj.estado = 'correcto';
+                msj.mensaje = 'Se ha guardado el registro correctamente';
+                msj.errores = '';
+                MSJ(res, 200, msj);
+            } catch (error) {
+                msj.estado = 'error';
+                msj.mensaje = 'La Peticion no se ejecuto';
+                msj.errores = error;
+                MSJ(res, 500, error)
+            }
+        }
+        else {
             msj.estado = 'error';
-            msj.mensaje = 'La Peticion no se ejecuto';
-            msj.errores = error;
-            MSJ(res,500,error)
+            msj.mensaje = 'El registro ya existe con esas llave primaria';
+            MSJ(res, 500, msj)
         }
     }
 };

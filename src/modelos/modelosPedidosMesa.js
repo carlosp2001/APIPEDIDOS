@@ -55,8 +55,8 @@ pedidos_mesa.belongsTo(mesas_x_area, {
     otherKey: 'idmesa'
 }); */
 
-// pedidos_mesa.sync().then(
-//     () => console.log("Sincronizacion Completa")
-// );
+pedidos_mesa.sync().then(
+    () => console.log("Sincronizacion Completa")
+);
 
 module.exports = pedidos_mesa;

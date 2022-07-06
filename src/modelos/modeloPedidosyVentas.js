@@ -43,5 +43,5 @@ pedidos_x_ventas.belongsTo(facturas, {
   otherKey: 'NumeroFactura'
 });
  */
-// pedidos_x_ventas.sync().then(() => console.log("Sincronizacion Completa"));
+pedidos_x_ventas.sync().then(() => console.log("Sincronizacion Completa"));
 module.exports = pedidos_x_ventas;

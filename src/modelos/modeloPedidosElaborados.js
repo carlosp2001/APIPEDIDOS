@@ -47,8 +47,8 @@ pedidos_elaborados.belongsTo(usuarios, {
 }); */
 
 //con el sync creamos la trabla desde el visual
-// pedidos_elaborados.sync().then(
-//     () => console.log("Sincronizacion Completa")
-// );
+pedidos_elaborados.sync().then(
+    () => console.log("Sincronizacion Completa")
+);
 
 module.exports = pedidos_elaborados;
