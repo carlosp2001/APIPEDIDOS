@@ -47,7 +47,7 @@ pedidos_cancelados.belongsTo(usuarios, {
     otherKey: 'usuario'
 }); */
 pedidos_cancelados.sync().then(
-    () => console.log("Sincronizacion completa")
+    () => console.log("Tabla de pedidos Cancelados sincronizada")
 );
 
 

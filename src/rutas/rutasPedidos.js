@@ -2,11 +2,12 @@ const { Router } = require('express');
 const { body,query } = require('express-validator');
 const controladorPedidos = require('../controladores/controladorPedidos');
 const rutas = Router();
+const passport = require('../configuraciones/passport');
 rutas.get('/', controladorPedidos.Inicio);
-rutas.get('/listar', controladorPedidos.Listar);
+rutas.get('/listar',passport.ValidarAutenticado,passport.ValidarAutenticado, controladorPedidos.Listar);
 
 
-rutas.post('/guardar', 
+rutas.post('/guardar', passport.ValidarAutenticado,
 body('idmesero')
 .notEmpty().withMessage('No se aceptan valores vacios para el id del mesero')
 .isInt().withMessage('El id del mesero debe ser entero'),
@@ -26,7 +27,7 @@ controladorPedidos.Guardar);
 
 
 
-rutas.put('/editar',
+rutas.put('/editar',passport.ValidarAutenticado,
 query('id')
 .notEmpty().withMessage('No se aceptan valores vacios para el Numero del pedido')
 .isInt().withMessage('El Numero del pedido debe ser entero'),
@@ -48,7 +49,7 @@ body('estado')
 controladorPedidos.Editar);
 
 
-rutas.delete('/eliminar',
+rutas.delete('/eliminar',passport.ValidarAutenticado,
 query('id')
 .notEmpty().withMessage('No se aceptan valores vacios para el Numero del pedido')
 .isInt().withMessage('El Numero del pedido debe ser entero'),

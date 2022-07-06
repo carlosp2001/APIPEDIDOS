@@ -56,7 +56,7 @@ pedidos_mesa.belongsTo(mesas_x_area, {
 }); */
 
 pedidos_mesa.sync().then(
-    () => console.log("Sincronizacion Completa")
+    () => console.log("Tabla de pedidos Mesa sincronizada")
 );
 
 module.exports = pedidos_mesa;

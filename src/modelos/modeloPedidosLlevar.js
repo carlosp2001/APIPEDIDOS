@@ -47,7 +47,7 @@ pedidos_llevar.belongsTo(clientes, {
 }); */
 
 pedidos_llevar.sync().then(
-    () => console.log("Sincronizacion Completa")
+    () => console.log("Tabla de PedidosLlevar sincronizada")
 );
 
 module.exports = pedidos_llevar;

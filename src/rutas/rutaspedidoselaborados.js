@@ -1,5 +1,6 @@
 const {Router}=require('express');
 const {body, query} = require('express-validator');
+const passport = require('../configuraciones/passport');
 
 const controladorpedidoselaborados = require('../controladores/controladorpedidoselab');
 const rutas = Router();
@@ -7,12 +8,12 @@ const rutas = Router();
 
 
 //*Listar
-rutas.get('/listar', controladorpedidoselaborados.Listar);
+rutas.get('/listar',passport.ValidarAutenticado, controladorpedidoselaborados.Listar);
 rutas.get('/', controladorpedidoselaborados.Inicio)
 
 
 //*Guardar
-rutas.post('/guardar',
+rutas.post('/guardar',passport.ValidarAutenticado,
 body ('iddetallepedido')
 .notEmpty().withMessage('Debe enviar idpedidoselaborados') //con esto validamos de que el campo no vaya vacio 
 .isInt().withMessage('El ID del pedido detalle debe ser un numero entero'),//con esta validamos que solo acepte numeros enteros
@@ -22,7 +23,7 @@ body ('idusuario')
 controladorpedidoselaborados.Guardar); 
 
 
-rutas.post('/guardarbulk',
+rutas.post('/guardarbulk',passport.ValidarAutenticado,
 body().isArray().withMessage("Debe enviar un arreglo"),
 body('*.iddetallepedido')
 .notEmpty().withMessage("No se aceptan valores vacios para el iddetallepedido")
@@ -33,7 +34,7 @@ body('*.idusuario')
 controladorpedidoselaborados.GuardarBulk)
 
 //*Editar
-rutas.put('/editar',
+rutas.put('/editar',passport.ValidarAutenticado,
 query('id')
 .notEmpty().withMessage('El ID del detalle pedido no puede estar vacio')
 .isInt().withMessage('El ID del detalle pedido debe ser un numero entero'),
@@ -44,7 +45,7 @@ body ('idusuario')
 controladorpedidoselaborados.Editar);
 
 //*Delete
-rutas.delete('/eliminar',
+rutas.delete('/eliminar',passport.ValidarAutenticado,
 query('id')
 .notEmpty().withMessage('El ID del detalle pedido no puede estar vacio')
 .isInt().withMessage('El ID del detalle pedido debe ser un numero entero'),

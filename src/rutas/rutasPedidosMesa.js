@@ -2,15 +2,16 @@
 
 const { Router } = require("express");
 const { body, query } = require("express-validator");
+const passport = require('../configuraciones/passport');
 
 const controladorPedidosMesa = require("../controladores/controladorPedidosMesa");
 const rutas = Router();
-rutas.get("/listar", controladorPedidosMesa.Listar);
+rutas.get("/listar",passport.ValidarAutenticado, controladorPedidosMesa.Listar);
 
 rutas.get("/", controladorPedidosMesa.Inicio);
 
 rutas.post(
-  "/guardar",
+  "/guardar",passport.ValidarAutenticado,
   body("idpedido")
     .notEmpty()
     .withMessage("No se aceptan valores vacios para el id de pedido")
@@ -33,7 +34,7 @@ rutas.post(
 );
 
 rutas.put(
-  "/editar",
+  "/editar",passport.ValidarAutenticado,
   query("id")
     .notEmpty()
     .withMessage("No se aceptan valores vacios para el id del registro")
@@ -60,7 +61,7 @@ rutas.put(
 );
 
 rutas.delete(
-  "/eliminar",
+  "/eliminar",passport.ValidarAutenticado,
   query("idregistro")
     .notEmpty()
     .withMessage("No se aceptan valores vacios para el id de registro")

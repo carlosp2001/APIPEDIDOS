@@ -8,4 +8,5 @@ rutas.use('/pedidoselaborados', require('./rutaspedidoselaborados'));
 rutas.use('/pedidosmesa', require('./rutasPedidosMesa'));
 rutas.use('/pedidosyventas', require('./rutasPedidosyVentas'));
 rutas.use('/entregapedido', require('./rutasEntregaPedido'));
+rutas.use('/autenticacion', require('./rutasAutenticacion'));
 module.exports = rutas;

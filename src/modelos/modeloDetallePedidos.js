@@ -69,7 +69,7 @@ detalle_pedido.belongsTo(pedidos, {
 });
 
 detalle_pedido.sync().then(
-    () => console.log("Sincronizacion Completa")
+    () => console.log("Tabla de detalle Pedidos")
 );
 
 module.exports = detalle_pedido;

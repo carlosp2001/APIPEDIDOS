@@ -43,6 +43,6 @@ const Pedido = db.define(
 );
 
 Pedido.sync()
-.then(() => console.log('Tabla creada'));
+.then(() => console.log('Tabla de pedidos sincronizada'));
 
 module.exports = Pedido;

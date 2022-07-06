@@ -1,14 +1,15 @@
 const {Router}=require('express');
 const {body, query} = require('express-validator');
+const passport = require('../configuraciones/passport');
 
 const controladorDetallePedido = require('../controladores/controladorDetallePedido');
 const rutas = Router();
 
 
 rutas.get('/', controladorDetallePedido.Inicio)
-rutas.get('/listar', controladorDetallePedido.Listar);
+rutas.get('/listar',passport.ValidarAutenticado, controladorDetallePedido.Listar);
 
-rutas.post('/guardar', 
+rutas.post('/guardar',passport.ValidarAutenticado, 
 body('NumeroPedido')
 .notEmpty().withMessage('El NumeroPedido es requerido'),
 
@@ -20,7 +21,7 @@ body('Cantidad')
 .isInt().withMessage('La Cantidad debe ser un numero entero'),
 controladorDetallePedido.Guardar);
 
-rutas.post('/guardarbulk',
+rutas.post('/guardarbulk',passport.ValidarAutenticado,
 body().isArray().withMessage("Debe enviar un arreglo"),
 body('*.NumeroPedido')
 .notEmpty().withMessage("No se aceptan valores vacios para el NumeroPedido")
@@ -35,7 +36,7 @@ controladorDetallePedido.GuardarBulk)
 
 module.exports = rutas;
 
-rutas.put('/editar', 
+rutas.put('/editar',passport.ValidarAutenticado, 
 query('idregistro')
 .notEmpty().withMessage('El idregistro es requerido')
 .isInt().withMessage('El idregistro debe ser un numero entero'),
@@ -51,7 +52,7 @@ body('Cantidad')
 .isInt().withMessage('La Cantidad debe ser un numero entero'),
 controladorDetallePedido.Editar)
 
-rutas.delete('/eliminar',
+rutas.delete('/eliminar',passport.ValidarAutenticado,
 query('idregistro')
 .notEmpty().withMessage('El idregistro es requerido')
 .isInt().withMessage('El idregistro debe ser un numero entero'),
