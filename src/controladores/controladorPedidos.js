@@ -1,6 +1,9 @@
 const { validationResult } = require('express-validator');
 const modeloPedidos = require('../modelos/modeloPedidos');
 
+
+const MSJ = require('../componentes/mensajes')
+const validar = require('../componentes/validar')
 exports.Inicio = async (req, res) => {
     const listaModulos = [
         {

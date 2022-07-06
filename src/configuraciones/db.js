@@ -1,8 +1,5 @@
 const sequelize = require('sequelize');
 const db = new sequelize(
-    'sigresdesarrollo',
-    'inventario',
-    'Inventario1@',
     {
         host: process.env.DB_HOST,
         dialect: process.env.DB_CONNECTION,
