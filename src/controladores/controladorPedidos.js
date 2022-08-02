@@ -115,6 +115,7 @@ exports.Guardar = async (req, res) => {
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
     const msj = { 
+        ultimoIdPedido: 0,
         mensaje: '',
         errores: []
     };
@@ -134,7 +135,7 @@ exports.Guardar = async (req, res) => {
                 activo: activo,
                 modalidad: modalidad,
                 estado: estado
-            });
+            }).then(result => msj.ultimoIdPedido = result.NumeroPedido);
             msj.mensaje='Pedido almacenado correctamente';
             msj.errores='';
         } 
