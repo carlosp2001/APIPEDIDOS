@@ -16,7 +16,24 @@ const usuarios = db.define(
         Contrasena: {
             type: DataTypes.STRING(255),
             allowNull: false
-        }
+        },
+        nombre: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        apellido: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        correo: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        imagen: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+      
 
     },
     {

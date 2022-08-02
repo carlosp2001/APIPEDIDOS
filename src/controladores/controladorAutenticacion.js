@@ -31,8 +31,13 @@ exports.InicioSesion = async (req, res) => {
     const data = {
       token: token,
       usuario: {
+        idregistro: buscarUsuario.idregistro,
         LoginUsuario: buscarUsuario.LoginUsuario,
-        Contrasena: buscarUsuario.Contrasena
+        Contrasena: buscarUsuario.Contrasena,
+        nombre: buscarUsuario.nombre,
+        apellido: buscarUsuario.apellido,
+        correo: buscarUsuario.correo,
+        imagen: buscarUsuario.imagen
       }
     };
     msj.estado = 'Correcto';
