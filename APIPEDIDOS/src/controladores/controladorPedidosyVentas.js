@@ -75,7 +75,7 @@ exports.Listar = async (req, res) => {
         msj.estado = 'error';
         msj.mensaje = 'La Peticion no se ejecuto';
         msj.errores = error;
-        MSJ(res,200,error)
+        MSJ(res,500,error)
     }
 };
 
@@ -107,14 +107,13 @@ exports.Guardar = async (req, res) => {
                 msj.estado = 'error';
                 msj.mensaje = 'La Peticion no se ejecuto';
                 msj.errores = error;
-                MSJ(res, 200, error)
+                MSJ(res, 500, error)
             }
         }
         else {
             msj.estado = 'error';
-            msj.errores = 'El registro ya existe con esas llave primaria'
-            msj.mensaje = 'La Peticion no se ejecuto';;
-            MSJ(res, 200, msj)
+            msj.mensaje = 'El registro ya existe con esas llave primaria';
+            MSJ(res, 500, msj)
         }
     }
 };

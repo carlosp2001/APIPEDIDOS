@@ -55,10 +55,8 @@ exports.Guardar = async (req, res) => {
       }
     } else {
         msj.estado = "error";
-      msj.mensaje = "La Peticion no se ejecuto";
-      msj.errores = "El id de pedido no existe o la llave primaria ya existe";
-      
-        MSJ(res, 200, msj);
+        msj.mensaje = "El id de pedido no existe o la llave primaria ya existe";
+        MSJ(res, 500, msj);
     }
   }
 };
