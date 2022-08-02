@@ -10,11 +10,11 @@ const usuarios = db.define(
             allowNull: false
         },
         LoginUsuario: {
-            type: DataTypes.TEXT(30),
+            type: DataTypes.STRING(50),
             allowNull: false
         },
         Contrasena: {
-            type: DataTypes.TEXT(250),
+            type: DataTypes.STRING(255),
             allowNull: false
         }
 

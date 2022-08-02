@@ -1,5 +1,7 @@
 const { validationResult } = require('express-validator');
 const modeloPedidos = require('../modelos/modeloPedidos');
+const modeloMeseros = require('../modelos/modeloMeseros');
+const modeloEstaciones = require('../modelos/modeloEstaciones');
 
 
 const MSJ = require('../componentes/mensajes')
@@ -60,8 +62,18 @@ exports.Inicio = async (req, res) => {
 exports.Listar = async (req, res) => { //async es para que espere a que se ejecute la funcion y le devuelta un resultado
     const msj = validar(req);
     try {
-        const lista = await modeloPedidos.findAll();
-        console.log(lista);
+        const lista = await modeloPedidos.findAll({
+            order: [
+                ['NumeroPedido', 'ASC']
+            ],
+            include: [{
+                model: modeloMeseros,
+            },{
+                model: modeloEstaciones,
+            }
+            ]
+        });
+        //console.log(lista);
         res.json(lista);
     }
     catch(error){
@@ -70,17 +82,46 @@ exports.Listar = async (req, res) => { //async es para que espere a que se ejecu
     }
 };
 
+//export listarmeseros
+exports.ListarMeseros = async (req, res) => {
+    const msj = validar(req);
+    try {
+        const lista = await modeloMeseros.findAll();
+        //console.log(lista);
+        res.json(lista);
+    }
+    catch(error){
+        //console.error(error);
+        res.json(error);
+    }
+}
+
+exports.ListarEstaciones = async (req, res) => {
+    const msj = validar(req);
+    try {
+        const lista = await modeloEstaciones.findAll();
+        //console.log(lista);
+        res.json(lista);
+    }
+    catch(error){
+        //console.error(error);
+        res.json(error);
+    }
+}
+
 /* #Funcion para guardar un nuevo pedido que recibe mediante el body
 #La fechas y el numero de pedido se genera automaticamente */
 exports.Guardar = async (req, res) => {
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
     const msj = { 
-        mensaje: ''
+        mensaje: '',
+        errores: []
     };
     if(validaciones.errors.length > 0){
         validaciones.errors.forEach(element => {
-            msj.mensaje += element.msg + '. ';
+            //msj.errores += element.msg + '. ';
+            msj.errores.push(element.msg);
         });
     }
     else{
@@ -95,9 +136,11 @@ exports.Guardar = async (req, res) => {
                 estado: estado
             });
             msj.mensaje='Pedido almacenado correctamente';
+            msj.errores='';
         } 
         catch (error) {
             msj.mensaje='Error al guardar el pedido';
+            msj.errores=error;
         }
             
     }
@@ -111,11 +154,12 @@ exports.Editar = async (req, res) => {
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
     const msj = { 
-        mensaje: ''
+        mensaje: '',
+        errores: []
     };
     if(validaciones.errors.length > 0){
         validaciones.errors.forEach(element => {
-            msj.mensaje += element.msg + '. ';
+            msj.errores.push(element.msg);
         });
     }
     else{
@@ -132,18 +176,18 @@ exports.Editar = async (req, res) => {
             }
             else{
                 buscarPedido.idmesero = idmesero;
-                buscarPedido.fechahora = fechahora;
-                buscarPedido.estacion = estacion;
                 buscarPedido.Estacion = Estacion;
                 buscarPedido.activo = activo;
                 buscarPedido.modalidad = modalidad;
                 buscarPedido.estado = estado;
                 await buscarPedido.save();
                 msj.mensaje='Pedido editado correctamente';
+                msj.errores='';
             }            
         } 
         catch (error) {
             msj.mensaje='Error al editar el pedido';
+            msj.errores=error;
         }
             
     }
@@ -157,11 +201,13 @@ exports.Eliminar = async (req, res) => {
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
     const msj = { 
-        mensaje: ''
+        mensaje: '',
+        errores: []
     };
     if(validaciones.errors.length > 0){
         validaciones.errors.forEach(element => {
-            msj.mensaje += element.msg + '. ';
+           // msj.mensaje += element.msg + '. ';
+           msj.errores.push(element.msg);
         });
     }
     else{
@@ -182,10 +228,12 @@ exports.Eliminar = async (req, res) => {
                     }
                 });
                 msj.mensaje='Pedido eliminado correctamente';
+                msj.errores='';
             }            
         } 
         catch (error) {
             msj.mensaje='Error al eliminar el pedido';
+            msj.errores=error;
         }
             
     }

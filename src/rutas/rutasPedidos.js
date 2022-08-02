@@ -5,6 +5,8 @@ const rutas = Router();
 const passport = require('../configuraciones/passport');
 rutas.get('/', controladorPedidos.Inicio);
 rutas.get('/listar',passport.ValidarAutenticado,passport.ValidarAutenticado, controladorPedidos.Listar);
+rutas.get('/listarmeseros',passport.ValidarAutenticado,passport.ValidarAutenticado, controladorPedidos.ListarMeseros);
+rutas.get('/listarestaciones',passport.ValidarAutenticado,passport.ValidarAutenticado, controladorPedidos.ListarEstaciones);
 
 
 rutas.post('/guardar', passport.ValidarAutenticado,
